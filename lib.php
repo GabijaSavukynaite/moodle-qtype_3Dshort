@@ -18,7 +18,7 @@
  * Serve question type files
  *
  * @since      2.0
- * @package    qtype_3D
+ * @package    qtype_model3d
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -29,8 +29,8 @@ defined('MOODLE_INTERNAL') || die();
 
 
 /**
- * Checks file access for 3D questions.
- * @package  qtype_3D
+ * Checks file access for model3d questions.
+ * @package  qtype_model3d
  * @category files
  * @param stdClass $course course object
  * @param stdClass $cm course module object
@@ -41,8 +41,8 @@ defined('MOODLE_INTERNAL') || die();
  * @param array $options additional options affecting the file serving
  * @return bool
  */
-function qtype_3D_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
-    global $DB, $CFG;
+function qtype_model3d_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
+    global $CFG;
     require_once($CFG->libdir . '/questionlib.php');
-    question_pluginfile($course, $context, 'qtype_3D', $filearea, $args, $forcedownload, $options);
+    question_pluginfile($course, $context, 'qtype_model3d', $filearea, $args, $forcedownload, $options);
 }

@@ -14,11 +14,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * 3D setup the ES6 javascript for the question type
+ * model3d setup the ES6 javascript for the question type
  * https://docs.moodle.org/dev/Javascript_Modules#ES6_Modules_.28Moodle_v3.8_and_above.29
  *
  * @package    qtype
- * @subpackage 3D
+ * @subpackage model3d
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,6 +27,17 @@
  *
  * @method init
  */
-export const init = () => {
-  alert("the javascript init code");
+export const init = (data) => {
+  
+  var iframe = document.getElementById('resourceobject');
+var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+const container = innerDoc.getElementById("WebGL-output");
+  // var node = document.createElement("LI"); // Create a <li> node
+  // var textnode = document.createTextNode("Water"); // Create a text node
+  // node.appendChild(textnode); // Append the text to <li>
+  // container.appendChild(node);
+  const point = container.scene.getObjectByName("point");
+  point.position.x = 300;
+  point.position.y = 20;
+  console.log();
 };

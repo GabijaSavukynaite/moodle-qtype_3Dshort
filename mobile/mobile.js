@@ -17,7 +17,7 @@
  * support for the mdl35+ mobile app. PHP calls this from within
  * classes/output/mobile.php
  * This file is the equivalent of
- * qtype/3D/classes/3D.ts in the core app
+ * qtype/model3d/classes/model3d.ts in the core app
  * e.g.
  * https://github.com/moodlehq/moodlemobile2/blob/v3.5.0/src/addon/qtype/ddwtos/classes/ddwtos.ts
  */

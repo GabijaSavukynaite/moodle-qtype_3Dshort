@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Question type class for the 3D question type.
+ * Question type class for the model3d question type.
  *
  * @package    qtype
- * @subpackage 3D
+ * @subpackage model3d
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -31,24 +31,32 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/questionlib.php');
 require_once($CFG->dirroot . '/question/engine/lib.php');
-require_once($CFG->dirroot . '/question/type/3D/question.php');
+require_once($CFG->dirroot . '/question/type/model3d/question.php');
 
 
 /**
- * The 3D question type.
+ * The model3d question type.
  *
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_3D extends question_type {
+class qtype_model3d extends question_type {
 
       /* ties additional table fields to the database */
-    public function extra_question_fields() {
-        return array('question_3D', 'somefieldname','anotherfieldname');
-    }
+    // public function extra_question_fields() {
+    //     return array('qtype_model3d', 'somefieldname','anotherfieldname');
+    // }
+
+    
     public function move_files($questionid, $oldcontextid, $newcontextid) {
+        $fs = get_file_storage();
+
         parent::move_files($questionid, $oldcontextid, $newcontextid);
+        $fs->move_area_files_to_new_context($oldcontextid,
+                                    $newcontextid, 'qtype_model3d', 'model', $questionid);
+
+        $this->move_files_in_combined_feedback($questionid, $oldcontextid, $newcontextid);
         $this->move_files_in_hints($questionid, $oldcontextid, $newcontextid);
     }
 
@@ -64,18 +72,32 @@ class qtype_3D extends question_type {
     public function save_question($question, $form) {
         return parent::save_question($question, $form);
     }
+
     public function save_question_options($question) {
         global $DB;
-        $options = $DB->get_record('question_3D', array('questionid' => $question->id));
+        $options = $DB->get_record('qtype_model3d', array('questionid' => $question->id));
+        
         if (!$options) {
             $options = new stdClass();
             $options->questionid = $question->id;
-            /* add any more non combined feedback fields here */
-            $options->id = $DB->insert_record('question_imageselect', $options);
+            $options->correctfeedback = '';
+            $options->partiallycorrectfeedback = '';
+            $options->incorrectfeedback = '';
+            $options->id = $DB->insert_record('qtype_model3d', $options);
         }
         $options = $this->save_combined_feedback_helper($options, $question, $question->context, true);
-        $DB->update_record('question_3D', $options);
+
+        // $entry = file_postupdate_standard_filemanager($question, 'model', $attachmentoptions, $context,
+        //                                       'mod_glossary', 'model', $question->id);
+        $DB->update_record('qtype_model3d', $options);
         $this->save_hints($question);
+
+
+
+        file_save_draft_area_files($question->model, $question->context->id,
+            'qtype_model3d', 'model', $question->id,
+            array('subdirs' => 0, 'maxbytes' => 0));
+            // array('subdirs' => 0, 'maxbytes' => 0, 'maxfiles' => 1));
     }
 
  /* 
@@ -101,7 +123,7 @@ class qtype_3D extends question_type {
     }
     
     public function import_from_xml($data, $question, qformat_xml $format, $extra = null) {
-        if (!isset($data['@']['type']) || $data['@']['type'] != 'question_3D') {
+        if (!isset($data['@']['type']) || $data['@']['type'] != 'qtype_model3d') {
             return false;
         }
         $question = parent::import_from_xml($data, $question, $format, null);
@@ -112,7 +134,7 @@ class qtype_3D extends question_type {
     public function export_to_xml($question, qformat_xml $format, $extra = null) {
         global $CFG;
         $pluginmanager = core_plugin_manager::instance();
-        $gapfillinfo = $pluginmanager->get_plugin_info('question_3D');
+        $gapfillinfo = $pluginmanager->get_plugin_info('qtype_model3d');
         $output = parent::export_to_xml($question, $format);
         //TODO
         $output .= $format->write_combined_feedback($question->options, $question->id, $question->contextid);
@@ -128,5 +150,11 @@ class qtype_3D extends question_type {
     public function get_possible_responses($questiondata) {
         // TODO.
         return array();
+    }
+
+       public function make_question($questiondata) {
+        $question = $this->make_question_instance($questiondata);
+        $this->initialise_question_instance($question, $questiondata);
+        return $question;
     }
 }

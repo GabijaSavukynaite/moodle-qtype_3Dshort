@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * 3D question type version information.
+ * model3d question type version information.
  *
  * @package    qtype
- * @subpackage 3D
+ * @subpackage model3d
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,8 +26,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'qtype_3D';
-$plugin->version   = 2021040200;
+$plugin->component = 'qtype_model3d';
+$plugin->version   = 2021042002;
 
 $plugin->requires  = 2016052300;
 

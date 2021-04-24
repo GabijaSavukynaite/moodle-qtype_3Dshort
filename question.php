@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * 3D question definition class.
+ * model3d question definition class.
  *
  * @package    qtype
- * @subpackage 3D
+ * @subpackage model3d
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -36,13 +36,13 @@ defined('MOODLE_INTERNAL') || die();
 
 
 /**
- * Represents a 3D question.
+ * Represents a model3d question.
  *
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_3D_question extends question_graded_automatically_with_countback {
+class qtype_model3d_question extends question_graded_automatically_with_countback {
 
     /* it may make more sense to think of this as get expected data types */
     public function get_expected_data() {
@@ -132,10 +132,11 @@ class qtype_3D_question extends question_graded_automatically_with_countback {
 
     public function check_file_access($qa, $options, $component, $filearea,
             $args, $forcedownload) {
-        // TODO.
-        if ($component == 'question' && $filearea == 'hint') {
-            return $this->check_hint_file_access($qa, $options, $args);
 
+        if ($component == 'qtype_model3d' && $filearea == 'model') {
+            $question = $qa->get_question(false);
+            $itemid = reset($args);
+            return $itemid == $question->id;
         } else {
             return parent::check_file_access($qa, $options, $component, $filearea,
                     $args, $forcedownload);

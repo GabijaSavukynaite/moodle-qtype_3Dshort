@@ -15,36 +15,36 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * 3D question type  capability definition
+ * model3d question type  capability definition
  *
- * @package    qtype_3D
+ * @package    qtype_model3d
  * @copyright  20XX Author Name
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
 
 $addons = [
-    "qtype_3D" => [
+    "qtype_model3d" => [
         "handlers" => [ // Different places where the add-on will display content.
-            '3D' => [ // Handler unique name (can be anything).
+            'model3d' => [ // Handler unique name (can be anything).
                 'displaydata' => [
-                    'title' => '3D question',
-                    'icon' => '/question/type/3D/pix/icon.gif',
+                    'title' => 'model3d question',
+                    'icon' => '/question/type/model3d/pix/icon.gif',
                     'class' => '',
                 ],
                 'delegate' => 'CoreQuestionDelegate', // Delegate (where to display the link to the add-on).
-                'method' => 'mobile_get_3D',
+                'method' => 'mobile_get_model3d',
                 'offlinefunctions' => [
-                    'mobile_get_3D' => [],// function in classes/output/mobile.php
+                    'mobile_get_model3d' => [],// function in classes/output/mobile.php
                 ], // Function needs caching for offline.
                 'styles' => [
-                    'url' => '/question/type/3D/mobile/styles_app.css',
+                    'url' => '/question/type/model3d/mobile/styles_app.css',
                     'version' => '1.00'
                 ]
             ]
         ],
         'lang' => [
-                    ['pluginname', 'qtype_3D'], // matching value in  lang/en/qtype_3D
+                    ['pluginname', 'qtype_model3d'], // matching value in  lang/en/qtype_model3d
         ],
     ]
 ];
