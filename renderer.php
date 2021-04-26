@@ -39,8 +39,13 @@ class qtype_model3d_renderer extends qtype_renderer {
     public function formulation_and_controls(question_attempt $qa,
             question_display_options $options) {
 
+        global $DB;
+
         $question = $qa->get_question();
         $componentname = $question->qtype->plugin_name();
+        $model = $DB->get_record('qtype_model3d_model', array('questionid' => $question->id));
+
+        
 
         // $model = file_prepare_standard_editor($model, 'description', $descriptionoptions, $context, 'mod_wavefront', 'description', $model->id);
         // $model = file_prepare_standard_filemanager($model, 'model', $modeloptions, $context, 'mod_wavefront', 'model', $model->id);
@@ -134,8 +139,7 @@ class qtype_model3d_renderer extends qtype_renderer {
         //                                     $file->get_filename());
 
         $result .= html_writer::end_tag("div");
-        $this->page->requires->js_call_amd('qtype_model3d/model', 'init',
-                array($questiontext));
+        $this->page->requires->js_call_amd('qtype_model3d/model', 'init');
 
 
 

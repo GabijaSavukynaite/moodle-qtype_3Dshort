@@ -35,13 +35,6 @@ $string['pluginnamesummary'] = 'A model3d question type that allows something to
 $string['modelfiles'] = 'Upload model';
 $string['modelfiles_help'] = 'Upload gltf file';
 $string['modelheading'] = 'Model';
-$string['stageheading'] = 'Stage';
-$string['stagewidth'] = 'Width';
-$string['stageheight'] = 'Height';
-$string['cameraheading'] = 'Camera';
-$string['camerax'] = 'X';
-$string['cameray'] = 'Y';
-$string['cameraz'] = 'Z';
-$string['cameraangle'] = 'View angle';
-$string['camerafar'] = 'Far';
-
+$string['canvasid'] = 'Canvas id';
+$string['modelheight'] = 'Model height';
+$string['modelwidth'] = 'Model width';

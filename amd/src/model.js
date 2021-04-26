@@ -27,17 +27,16 @@
  *
  * @method init
  */
-export const init = (data) => {
-  
-  var iframe = document.getElementById('resourceobject');
-var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
-const container = innerDoc.getElementById("WebGL-output");
+export const init = () => {
+  // var iframe = document.getElementById("resourceobject");
+  // var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+  // const container = innerDoc.getElementById(canvasId);
   // var node = document.createElement("LI"); // Create a <li> node
   // var textnode = document.createTextNode("Water"); // Create a text node
   // node.appendChild(textnode); // Append the text to <li>
   // container.appendChild(node);
-  const point = container.scene.getObjectByName("point");
-  point.position.x = 300;
-  point.position.y = 20;
-  console.log();
+  // const point = container.scene.getObjectByName("draggable");
+  // point.position.x = 300;
+  // point.position.y = 20;
+  console.log("test");
 };

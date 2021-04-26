@@ -49,47 +49,22 @@ class qtype_model3d_edit_form extends question_edit_form {
 
         // Model
         $filemanager_options = array();
-        $filemanager_options['accepted_types'] = array('.html', ".js");
+        $filemanager_options['accepted_types'] = array('.html', ".js", ".css");
         // $filemanager_options['maxbytes'] = 0;
         // $filemanager_options['maxfiles'] = -1;
-
         $mform->addElement('header', 'modeloptions', get_string('modelheading', 'qtype_model3d'));
         $mform->addElement('filemanager', 'model', get_string('modelfiles', 'qtype_model3d'), null, $filemanager_options);
         $mform->addHelpButton('model', 'modelfiles', 'qtype_model3d');
+        $mform->addRule('model', get_string('required'), 'required', null, 'client');
 
-        // Stage
-        $mform->addElement('header', 'stageoptions', get_string('stageheading', 'qtype_model3d'));
+        $mform->addElement('text', 'canvasid', get_string('canvasid', 'qtype_model3d'), 'maxlength="20"');
+        $mform->setType('canvasid', PARAM_TEXT);
 
-        $mform->addElement('text', 'stagewidth', get_string('stagewidth', 'qtype_model3d'), 'maxlength="5" size="5"');
-        $mform->setDefault('stagewidth', 400);
-        $mform->setType('stagewidth', PARAM_INT);
-        
-        $mform->addElement('text', 'stageheight', get_string('stageheight', 'qtype_model3d'), 'maxlength="5" size="5"');
-        $mform->setDefault('stageheight', 400);
-        $mform->setType('stageheight', PARAM_INT);
-        
-        // Camera
-        $mform->addElement('header', 'cameraoptions', get_string('cameraheading', 'qtype_model3d'));
-        
-        $mform->addElement('text', 'cameraangle', get_string('cameraangle', 'qtype_model3d'), 'maxlength="5" size="5"');
-        $mform->setDefault('cameraangle', 45);
-        $mform->setType('cameraangle', PARAM_INT);
-        
-        $mform->addElement('text', 'camerafar', get_string('camerafar', 'qtype_model3d'), 'maxlength="5" size="5"');
-        $mform->setDefault('camerafar', 1000);
-        $mform->setType('camerafar', PARAM_INT);
-        
-        $mform->addElement('text', 'camerax', get_string('camerax', 'qtype_model3d'), 'maxlength="5" size="5"');
-        $mform->setDefault('camerax', 0);
-        $mform->setType('camerax', PARAM_INT);
-        
-        $mform->addElement('text', 'cameray', get_string('cameray', 'qtype_model3d'), 'maxlength="5" size="5"');
-        $mform->setDefault('cameray', 1);
-        $mform->setType('cameray', PARAM_INT);
-        
-        $mform->addElement('text', 'cameraz', get_string('cameraz', 'qtype_model3d'), 'maxlength="5" size="5"');
-        $mform->setDefault('cameraz', 200);
-        $mform->setType('cameraz', PARAM_INT);
+        $mform->addElement('text', 'modelwidth', get_string('modelwidth', 'qtype_model3d'), 'maxlength="5" size="5"');
+        $mform->setType('modelwidth', PARAM_INT);
+
+        $mform->addElement('text', 'modelheight', get_string('modelheight', 'qtype_model3d'), 'maxlength="5" size="5"');
+        $mform->setType('modelheight', PARAM_INT);
     }
 
     protected function data_preprocessing($question) {

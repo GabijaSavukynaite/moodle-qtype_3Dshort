@@ -87,17 +87,31 @@ class qtype_model3d extends question_type {
         }
         $options = $this->save_combined_feedback_helper($options, $question, $question->context, true);
 
-        // $entry = file_postupdate_standard_filemanager($question, 'model', $attachmentoptions, $context,
-        //                                       'mod_glossary', 'model', $question->id);
         $DB->update_record('qtype_model3d', $options);
         $this->save_hints($question);
 
+        $oldmodel = $DB->get_record('qtype_model3d_model', array('questionid' => $question->id));
 
+        $model = new stdClass();
+        if (!$oldmodel->id) {
+            $model->id = $oldmodel->id;
+        } 
+
+        $model->questionid = $question->id;
+        $model->canvasid = $question->canvasid;
+        $model->width = $question->modelwidth;
+        $model->height = $question->modelheight;
+
+        if (isset($oldmodel->id)) {
+            $model->id = $oldmodel->id;
+            $DB->update_record('qtype_model3d_model', $model);
+        } else {
+            $DB->insert_record('qtype_model3d_model', $model);
+        }
 
         file_save_draft_area_files($question->model, $question->context->id,
             'qtype_model3d', 'model', $question->id,
             array('subdirs' => 0, 'maxbytes' => 0));
-            // array('subdirs' => 0, 'maxbytes' => 0, 'maxfiles' => 1));
     }
 
  /* 
@@ -105,21 +119,54 @@ class qtype_model3d extends question_type {
  * also make $DB calls to get data from other tables
  */
    public function get_question_options($question) {
-     //TODO
-       parent::get_question_options($question);
+        global $DB;
+        // $question->options = $DB->get_record('qtype_'.$this->name(),
+        //         array('questionid' => $question->id), '*', MUST_EXIST);
+
+        // $question->options = $DB->get_record('qtype_model3d', ['questionid' => $question->id]);
+
+        // if ($question->options === false) {
+            // If this has happened, then we have a problem.
+            // For the user to be able to edit or delete this question, we need options.
+            debugging("Question ID {$question->id} was missing an options record. Using default.", DEBUG_DEVELOPER);
+
+            $question->options = $this->create_default_options($question);
+        // }
+        parent::get_question_options($question);
     }
+
+        protected function create_default_options($question) {
+        // Create a default question options record.
+        $options = new stdClass();
+        $options->questionid = $question->id;
+
+        // Get the default strings and just set the format.
+        $options->correctfeedback = get_string('correctfeedbackdefault', 'question');
+        $options->correctfeedbackformat = FORMAT_HTML;
+        $options->partiallycorrectfeedback = get_string('partiallycorrectfeedbackdefault', 'question');;
+        $options->partiallycorrectfeedbackformat = FORMAT_HTML;
+        $options->incorrectfeedback = get_string('incorrectfeedbackdefault', 'question');
+        $options->incorrectfeedbackformat = FORMAT_HTML;
+        $options->shownumcorrect = 1;
+
+        return $options;
+    }
+
 
  /**
  * executed at runtime (e.g. in a quiz or preview 
  **/
     protected function initialise_question_instance(question_definition $question, $questiondata) {
         parent::initialise_question_instance($question, $questiondata);
-        $this->initialise_question_answers($question, $questiondata);
-        parent::initialise_combined_feedback($question, $questiondata);
-    }
-    
-   public function initialise_question_answers(question_definition $question, $questiondata,$forceplaintextanswers = true){ 
-     //TODO
+        $questiondata->options->correctfeedback = get_string('correctfeedbackdefault', 'question');
+        $questiondata->options->correctfeedbackformat = FORMAT_HTML;
+        $questiondata->options->partiallycorrectfeedback = get_string('partiallycorrectfeedbackdefault', 'question');;
+        $questiondata->options->partiallycorrectfeedbackformat = FORMAT_HTML;
+        $questiondata->options->incorrectfeedback = get_string('incorrectfeedbackdefault', 'question');
+        $questiondata->options->incorrectfeedbackformat = FORMAT_HTML;
+        $questiondata->options->shownumcorrect = 1;
+        // print_object($questiondata);
+        $this->initialise_combined_feedback($question, $questiondata,true);
     }
     
     public function import_from_xml($data, $question, qformat_xml $format, $extra = null) {
@@ -152,9 +199,16 @@ class qtype_model3d extends question_type {
         return array();
     }
 
-       public function make_question($questiondata) {
+    public function make_question($questiondata) {
         $question = $this->make_question_instance($questiondata);
         $this->initialise_question_instance($question, $questiondata);
         return $question;
+    }
+
+    public function delete_question($questionid, $contextid) {
+        global $DB;
+        $DB->delete_records('qtype_'.$this->name(), array('questionid' => $questionid));
+        $DB->delete_records('qtype_'.$this->name().'_model', array('questionid' => $questionid));
+        return parent::delete_question($questionid, $contextid);
     }
 }
