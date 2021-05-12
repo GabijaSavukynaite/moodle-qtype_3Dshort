@@ -38,3 +38,6 @@ $string['modelheading'] = 'Model';
 $string['canvasid'] = 'Canvas id';
 $string['modelheight'] = 'Model height';
 $string['modelwidth'] = 'Model width';
+
+$string['anwersheading'] = 'Answers';
+$string['answer'] = 'Answer string';

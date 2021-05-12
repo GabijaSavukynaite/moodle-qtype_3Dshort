@@ -48,12 +48,10 @@ class qtype_model3d_edit_form extends question_edit_form {
         // $this->add_interactive_settings(true, true);
 
         // Model
-        $filemanager_options = array();
-        $filemanager_options['accepted_types'] = array('.html', ".js", ".css");
         // $filemanager_options['maxbytes'] = 0;
         // $filemanager_options['maxfiles'] = -1;
         $mform->addElement('header', 'modeloptions', get_string('modelheading', 'qtype_model3d'));
-        $mform->addElement('filemanager', 'model', get_string('modelfiles', 'qtype_model3d'), null, $filemanager_options);
+        $mform->addElement('filemanager', 'model', get_string('modelfiles', 'qtype_model3d'), null, array('accepted_types' => array('.html', ".js", ".css")));
         $mform->addHelpButton('model', 'modelfiles', 'qtype_model3d');
         $mform->addRule('model', get_string('required'), 'required', null, 'client');
 
@@ -65,6 +63,23 @@ class qtype_model3d_edit_form extends question_edit_form {
 
         $mform->addElement('text', 'modelheight', get_string('modelheight', 'qtype_model3d'), 'maxlength="5" size="5"');
         $mform->setType('modelheight', PARAM_INT);
+
+        // Answers
+        $mform->addElement('header', 'answersheader', get_string('anwersheading', 'qtype_model3d'));
+        $mform->addElement('textarea', 'answer', get_string("answer", "qtype_model3d"),'wrap="virtual" rows="10" cols="70"');
+    }
+
+    public function set_data($question) {
+        global $DB;
+        $model = $DB->get_record('qtype_model3d_model', array('questionid' => $question->id));
+
+        if ($model->id) {
+            $question->canvasid = $model->canvasid;
+            $question->modelwidth = $model->width;
+            $question->modelheight = $model->height;
+        } 
+
+        parent::set_data($question);
     }
 
     protected function data_preprocessing($question) {

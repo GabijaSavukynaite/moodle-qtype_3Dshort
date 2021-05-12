@@ -20,7 +20,6 @@
  * @package    qtype
  * @subpackage model3d
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
-
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -39,11 +38,10 @@ defined('MOODLE_INTERNAL') || die();
  * Represents a model3d question.
  *
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
-
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_model3d_question extends question_graded_automatically_with_countback {
-
+    public $correctanswer;
     /* it may make more sense to think of this as get expected data types */
     public function get_expected_data() {
         // TODO.
@@ -149,7 +147,12 @@ class qtype_model3d_question extends question_graded_automatically_with_countbac
      */
     public function grade_response(array $response) {
         // TODO.
-        $fraction = 0;
+        $fraction = 0.5;
+        if ($this->correctanswer == true ) {
+            $fraction = 1;
+        } else {
+            $fraction = 0;
+        }
         return array($fraction, question_state::graded_state_for_fraction($fraction));
     }
      
@@ -173,7 +176,6 @@ class qtype_model3d_question extends question_graded_automatically_with_countbac
         tries or 'Adaptive mode' behaviour, so that the student will 
         have several tries to get the question right, then this option 
         controls how much they are penalised for each incorrect try.
-
         The penalty is a proportion of the total question grade, so if 
         the question is worth three marks, and the penalty is 0.3333333, 
         then the student will score 3 if they get the question right first 

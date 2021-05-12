@@ -43,6 +43,8 @@ require_once($CFG->dirroot . '/question/type/model3d/question.php');
  */
 class qtype_model3d extends question_type {
 
+
+
       /* ties additional table fields to the database */
     // public function extra_question_fields() {
     //     return array('qtype_model3d', 'somefieldname','anotherfieldname');
@@ -75,6 +77,35 @@ class qtype_model3d extends question_type {
 
     public function save_question_options($question) {
         global $DB;
+
+        // Fetch old answer ids so that we can reuse them.
+        $oldanswers = $DB->get_records('question_answers',
+                array('question' => $question->id), 'id ASC');
+
+        // Save the true answer - update an existing answer if possible.
+        $answer = array_shift($oldanswers);
+        if (!$answer) {
+            $answer = new stdClass();
+            $answer->question = $question->id;
+            $answer->answer = '';
+            $answer->feedback = '';
+            $answer->id = $DB->insert_record('question_answers', $answer);
+        }
+
+        $answer->answer = $question->answer;
+        $answer->fraction = 1;
+        $answer->feedback = "";
+        $DB->update_record('question_answers', $answer);
+        $trueid = $answer->id;
+
+        // Delete any left over old answer records.
+        $fs = get_file_storage();
+        foreach ($oldanswers as $oldanswer) {
+            $fs->delete_area_files($context->id, 'question', 'answerfeedback', $oldanswer->id);
+            $DB->delete_records('question_answers', array('id' => $oldanswer->id));
+        }
+
+
         $options = $DB->get_record('qtype_model3d', array('questionid' => $question->id));
         
         if (!$options) {
@@ -132,10 +163,16 @@ class qtype_model3d extends question_type {
 
             $question->options = $this->create_default_options($question);
         // }
+           if (!$question->options->answers = $DB->get_records('question_answers',
+                array('question' =>  $question->id), 'id ASC')) {
+            echo $OUTPUT->notification('Error: Missing question answers for question ' .
+                    $question->id . '!');
+            return false;
+        }
         parent::get_question_options($question);
     }
 
-        protected function create_default_options($question) {
+    protected function create_default_options($question) {
         // Create a default question options record.
         $options = new stdClass();
         $options->questionid = $question->id;
@@ -158,6 +195,7 @@ class qtype_model3d extends question_type {
  **/
     protected function initialise_question_instance(question_definition $question, $questiondata) {
         parent::initialise_question_instance($question, $questiondata);
+        $question->correctanswer = true;
         $questiondata->options->correctfeedback = get_string('correctfeedbackdefault', 'question');
         $questiondata->options->correctfeedbackformat = FORMAT_HTML;
         $questiondata->options->partiallycorrectfeedback = get_string('partiallycorrectfeedbackdefault', 'question');;
@@ -211,4 +249,6 @@ class qtype_model3d extends question_type {
         $DB->delete_records('qtype_'.$this->name().'_model', array('questionid' => $questionid));
         return parent::delete_question($questionid, $contextid);
     }
+
+  
 }

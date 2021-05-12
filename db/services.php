@@ -15,20 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * model3d question type version information.
+ * model3d question type  capability definition
  *
- * @package    qtype
- * @subpackage model3d
- * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
-
+ * @package    qtype_model3d
+ * @copyright  20XX Author Name
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'qtype_model3d';
-$plugin->version   = 2021051100;
-
-$plugin->requires  = 2016052300;
-
-$plugin->maturity  = MATURITY_ALPHA;
+$functions = [
+    'qtype_model3d_get_grade' => [
+        'classname' => 'qtype_model3d_external',
+        'classpath' => 'question/type/model3d/externallib.php',
+        'methodname' => 'get_grade',
+        'description' => 'Returns error or success of when insert new response',
+        'type' => 'read',
+        'ajax' => true
+    ]
+];

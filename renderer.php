@@ -41,6 +41,8 @@ class qtype_model3d_renderer extends qtype_renderer {
 
         global $DB;
 
+        
+
         $question = $qa->get_question();
         $componentname = $question->qtype->plugin_name();
         $model = $DB->get_record('qtype_model3d_model', array('questionid' => $question->id));
@@ -56,7 +58,7 @@ class qtype_model3d_renderer extends qtype_renderer {
 
         $questiontext = $question->format_questiontext($qa);
 
-        $result = html_writer::start_tag("div", array('class' => 'qtext'));
+        $result = html_writer::start_tag("div", array('class' => 'qtext', 'id'=> '3dquestion'));
        
         // $result .= html_writer::tag('div', $questiontext, null);
 
@@ -82,6 +84,7 @@ class qtype_model3d_renderer extends qtype_renderer {
 
 
         foreach ($files as $file) {
+         
             // $f is an instance of stored_file
             $pathname = $file->get_filepath();
             $filename = $file->get_filename();
@@ -89,6 +92,18 @@ class qtype_model3d_renderer extends qtype_renderer {
         $slot = $qa->get_slot();
             $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
             // what type of file is this?
+            if($ext === "json") {
+                $content = $file->get_content();
+                $json_a = json_decode( $content,true);
+               
+                
+                // $urlj = moodle_url::make_pluginfile_url($question->contextid, $componentname,
+                //             'model', "$qubaid/$slot/$question->id", '/',
+                //             $file->get_filename());
+                //             print_object($urlj);
+
+            }
+
             if($ext === "html") {
  
                 $pathname = $file->get_filepath();
@@ -112,15 +127,15 @@ class qtype_model3d_renderer extends qtype_renderer {
                 $attributes['height'] = '350px';
                 $attributes['scrolling'] = "no";
 
-                $result .= html_writer::empty_tag('iframe', $attributes);
+                // $result .= html_writer::empty_tag('iframe', $attributes);
 
-    //                      $code = <<<EOT
-    // <div class="qtext">
-    // <iframe id="resourceobject" src="$url">
+                        $result .= <<<EOT
+    <div class="qtext">
+    <iframe id="resourceobject" width="100%" height="350px" scrolling="no" src="$url" frameBorder="0">
        
-    // </iframe>
-    // </div>
-    // EOT;
+    </iframe>
+    </div>
+    EOT;
     
                                             
             } 
@@ -138,8 +153,17 @@ class qtype_model3d_renderer extends qtype_renderer {
         //                                     "model", "$qubaid/$slot/{$itemid}", '/',
         //                                     $file->get_filename());
 
+        $qstate = "gradded";
+     if ($qa->get_state() == "todo") {
+        $qstate = "todo";
+        }
+
+        //   $result .= html_writer::nonempty_tag('div',
+        //             "testas");
+        //                  $this->page->requires->js_call_amd('qtype_model3d/model', 'init', array($qstate));
+        
         $result .= html_writer::end_tag("div");
-        $this->page->requires->js_call_amd('qtype_model3d/model', 'init');
+   
 
 
 
@@ -148,11 +172,8 @@ class qtype_model3d_renderer extends qtype_renderer {
         from one question to another in a quiz and some code to disable the input fields
         once a quesiton is submitted/marked */
 
-        /* if ($qa->get_state() == question_state::$invalid) {
-            $result .= html_writer::nonempty_tag('div',
-                    $question->get_validation_error(array('answer' => $currentanswer)),
-                    array('class' => 'validationerror'));
-        }*/
+          
+ 
 
  
 

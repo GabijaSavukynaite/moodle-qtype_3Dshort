@@ -27,16 +27,79 @@
  *
  * @method init
  */
-export const init = () => {
-  // var iframe = document.getElementById("resourceobject");
-  // var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
-  // const container = innerDoc.getElementById(canvasId);
-  // var node = document.createElement("LI"); // Create a <li> node
-  // var textnode = document.createTextNode("Water"); // Create a text node
-  // node.appendChild(textnode); // Append the text to <li>
-  // container.appendChild(node);
-  // const point = container.scene.getObjectByName("draggable");
-  // point.position.x = 300;
-  // point.position.y = 20;
-  console.log("test");
+
+import Ajax from "core/ajax";
+
+export const init = (canvasId) => {
+  window.addEventListener("load", (event) => {
+    const iframe = document.getElementById("resourceobject");
+    const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    const container = innerDoc.getElementById("rendererCanvas");
+    const scene = container.scene;
+
+    const button = document.getElementById("saveGrade");
+    button.setAttribute(
+      "style",
+      "display:inline-block; padding:0.3em 1.2em; margin:0 0.3em 0.3em 0;border-radius:2em;box-sizing: border-box;text-decoration:none;font-family:'Roboto',sans-serif;font-weight:300;color:#FFFFFF;background-color:#4eb5f1;text-align:center;transition: all 0.2s;"
+    );
+
+    button.addEventListener("click", () => {
+      const answers = [];
+      scene.traverse(function (child) {
+        if (child.name === "draggable") {
+          child.material.color.set("#fff");
+          answers.push({
+            id: child.id,
+            position: {
+              x: child.position.x.toFixed(2),
+              y: child.position.y.toFixed(2),
+              z: child.position.z.toFixed(2),
+            },
+          });
+        }
+      });
+
+      var answersInput = document.createElement("input");
+      answersInput.type = "hidden";
+      answersInput.value = JSON.stringify(answers);
+      answersInput.id = "response";
+      document.getElementById("3dquestion").appendChild(answersInput);
+      console.log(document.getElementById("3dquestion"));
+    });
+  });
+
+  // export const displayCorrectAnswers = (answers) => {};
+
+  //   var promises = Ajax.call(
+  //     [
+  //       {
+  //         methodname: "qtype_model3d_get_grade",
+  //         args: { edugameid: 1, score: 2 },
+  //       },
+  //     ],
+  //     true
+  //   );
+  //   promises[0]
+  //     .done(function (test) {
+  //       console.log(test);
+  //       console.log("success");
+  //     })
+  //     .fail(function (response) {
+  //       console.log(response);
+  //     });
+  // });
+
+  // export const init = () => {
+  //     var promises = Ajax.call([{
+  //         methodname: 'qtype_model3d_get_grade',
+  //         args: { edugameid: 1, score: 2 },
+  //     }], true);
+  //     promises[0]
+  //         .done(function() {
+  //             console.log("success")
+  //         })
+  //         .fail(function(response) {
+  //             console.log("fail")
+  //         });
+  // }
 };
