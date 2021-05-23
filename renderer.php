@@ -124,18 +124,13 @@ class qtype_model3d_renderer extends qtype_renderer {
                 $attributes['id'] = "contentframe";
                 $attributes['src'] = $url;
                 $attributes['width'] = "100%";
-                $attributes['height'] = '350px';
+                $attributes['height'] = '400px';
                 $attributes['scrolling'] = "no";
 
                 // $result .= html_writer::empty_tag('iframe', $attributes);
 
-                        $result .= <<<EOT
-    <div class="qtext">
-    <iframe id="resourceobject" width="100%" height="350px" scrolling="no" src="$url" frameBorder="0">
-       
-    </iframe>
-    </div>
-    EOT;
+
+      
     
                                             
             } 
@@ -153,14 +148,77 @@ class qtype_model3d_renderer extends qtype_renderer {
         //                                     "model", "$qubaid/$slot/{$itemid}", '/',
         //                                     $file->get_filename());
 
-        $qstate = "gradded";
-     if ($qa->get_state() == "todo") {
-        $qstate = "todo";
-        }
+  
+        $id = "saveGrade". $question->id;
+        $inputname = $qa->get_qt_field_name('answer');
+        $resourceobject = "resourceobject". $question->id;
+        print_object($id);
+     if ($qa->get_state() == "gradedwrong" || $qa->get_state() == "gradedright") {
+          $result .= <<<EOT
+    <div class="qtext">
+    <iframe id="$resourceobject" width="100%" height="350px" scrolling="no" src="$url" frameBorder="0">
+    </iframe>
+    <table>
+        <tr>
+            <th>Company</th>
+            <th>Contact</th>
+            <th>Country</th>
+        </tr>
+        <tr>
+            <th>Company</th>
+            <th>Contact</th>
+            <th>Country</th>
+        </tr>
+        <tr>
+            <th>Company</th>
+            <th>Contact</th>
+            <th>Country</th>
+        </tr>
+        <tr>
+            <th>Company</th>
+            <th>Contact</th>
+            <th>Country</th>
+        </tr>
+        <tr>
+            <th>Company</th>
+            <th>Contact</th>
+            <th>Country</th>
+        </tr>
+        <tr>
+            <th>Company</th>
+            <th>Contact</th>
+            <th>Country</th>
+        </tr>
+    </table>
+    </div>
+    EOT;
 
-        //   $result .= html_writer::nonempty_tag('div',
-        //             "testas");
-        //                  $this->page->requires->js_call_amd('qtype_model3d/model', 'init', array($qstate));
+ 
+    }
+        else {
+               $this->page->requires->js_call_amd('qtype_model3d/model', 'init', array('id'=>$id, "resourceobject"=>$resourceobject, "inputname" => $inputname));
+                $result .= <<<EOT
+    <div class="qtext">
+    <iframe id="$resourceobject" width="100%" height="350px" scrolling="no" src="$url" frameBorder="0">
+    </iframe>
+  
+    </div>
+    EOT;
+
+
+   
+        }
+ 
+
+    
+       
+        $trueattributes = array(
+            'type' => 'hidden',
+            'name' => $inputname,
+            'value' => 'test',
+            'id' => $inputname,
+        );
+        $result .= html_writer::empty_tag('input', $trueattributes);
         
         $result .= html_writer::end_tag("div");
    
@@ -182,13 +240,13 @@ class qtype_model3d_renderer extends qtype_renderer {
         return $result;
     }
 
-    // public function specific_feedback(question_attempt $qa) {
-    //     // TODO.
-    //     return '';
-    // }
+    public function specific_feedback(question_attempt $qa) {
+        // TODO.
+        return 'specific_feedback';
+    }
 
-    // public function correct_response(question_attempt $qa) {
-    //     // TODO.
-    //     return '';
-    // }
+    public function correct_response(question_attempt $qa) {
+        // TODO.
+        return 'correct_response';
+    }
 }

@@ -43,9 +43,9 @@ defined('MOODLE_INTERNAL') || die();
 class qtype_model3d_question extends question_graded_automatically_with_countback {
     public $correctanswer;
     /* it may make more sense to think of this as get expected data types */
+
     public function get_expected_data() {
-        // TODO.
-        return array();
+        return array('answer' => PARAM_RAW );
     }
     
      public function start_attempt(question_attempt_step $step, $variant) {
@@ -58,9 +58,13 @@ class qtype_model3d_question extends question_graded_automatically_with_countbac
      * @return summary a string that summarises how the user responded. This 
      * is used in the quiz responses report
      * */
+
     public function summarise_response(array $response) {
-        // TODO.
-        return null;
+        if (isset($response['answer'])) {
+            return $response['answer'];
+        } else {
+            return null;
+        }
     }
 
     public function is_complete_response(array $response) {
@@ -112,8 +116,7 @@ class qtype_model3d_question extends question_graded_automatically_with_countbac
      * when a quiz containing this question starts.
      */
     public function get_correct_response() {
-        // TODO.        
-        return array();
+        return array('answer' => $this->correctanswer);
     }
     /**
      * Given a response, reset the parts that are wrong. Relevent in
@@ -148,7 +151,7 @@ class qtype_model3d_question extends question_graded_automatically_with_countbac
     public function grade_response(array $response) {
         // TODO.
         $fraction = 0.5;
-        if ($this->correctanswer == true ) {
+        if ($response['answer'] == "A=1;B=2,C=3") {
             $fraction = 1;
         } else {
             $fraction = 0;

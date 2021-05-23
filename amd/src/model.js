@@ -30,43 +30,61 @@
 
 import Ajax from "core/ajax";
 
-export const init = (canvasId) => {
+export const init = (id, resourceobject, inputname) => {
+  console.log("test" + resourceobject )
+  var node = document.createElement("LI");                 // Create a <li> node
+var textnode = document.createTextNode("Water");   
+console.log(textnode)      // Create a text node
+node.appendChild(textnode);   
+ const button = document.getElementById(id)
+
   window.addEventListener("load", (event) => {
-    const iframe = document.getElementById("resourceobject");
+    const iframe = document.getElementById(resourceobject);
     const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
     const container = innerDoc.getElementById("rendererCanvas");
-    const scene = container.scene;
 
-    const button = document.getElementById("saveGrade");
+
+//     const button = document.getElementById("saveGrade");
+//     buttonShort.style.width = '200px'; // setting the width to 200px
+// buttonShort.style.height = '200px'; // setting the height to 200px
+// buttonShort.style.background = 'teal'; // setting the background color to teal
+// modelContainer
+
+
+
     button.setAttribute(
       "style",
       "display:inline-block; padding:0.3em 1.2em; margin:0 0.3em 0.3em 0;border-radius:2em;box-sizing: border-box;text-decoration:none;font-family:'Roboto',sans-serif;font-weight:300;color:#FFFFFF;background-color:#4eb5f1;text-align:center;transition: all 0.2s;"
     );
 
-    button.addEventListener("click", () => {
-      const answers = [];
-      scene.traverse(function (child) {
-        if (child.name === "draggable") {
-          child.material.color.set("#fff");
-          answers.push({
-            id: child.id,
-            position: {
-              x: child.position.x.toFixed(2),
-              y: child.position.y.toFixed(2),
-              z: child.position.z.toFixed(2),
-            },
-          });
-        }
-      });
+    button.addEventListener("click", (e) => {
+      console.log("test")
+          
+    const getAnswers = container.getAnswers;
+    const answers = getAnswers();
+      // e.prenventDefault();
+      // const answers = [];
+      // scene.traverse(function (child) {
+      //   if (child.name === "draggable") {
+      //     child.material.color.set("#fff");
+      //     answers.push({
+      //       id: child.id,
+      //       position: {
+      //         x: child.position.x.toFixed(2),
+      //         y: child.position.y.toFixed(2),
+      //         z: child.position.z.toFixed(2),
+      //       },
+      //     });
+      //   }
+      // });
 
-      var answersInput = document.createElement("input");
-      answersInput.type = "hidden";
-      answersInput.value = JSON.stringify(answers);
-      answersInput.id = "response";
-      document.getElementById("3dquestion").appendChild(answersInput);
-      console.log(document.getElementById("3dquestion"));
+      const answersInput = document.getElementById(inputname);
+      answersInput.value = answers;
+    
     });
   });
+
+
 
   // export const displayCorrectAnswers = (answers) => {};
 
@@ -103,3 +121,5 @@ export const init = (canvasId) => {
   //         });
   // }
 };
+
+  export const val = (canvasId) => {console.log("val") }
