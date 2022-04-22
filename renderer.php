@@ -59,26 +59,6 @@ class qtype_model3d_renderer extends qtype_renderer {
         $questiontext = $question->format_questiontext($qa);
 
         $result = html_writer::start_tag("div", array('class' => 'qtext', 'id'=> '3dquestion'));
-       
-        // $result .= html_writer::tag('div', $questiontext, null);
-
-        
-
-        // $file = reset($files); 
- 
-
-            //  foreach ($files as $file) {
-            //       print_object( $file);
-            //  }
-
-        // //---------------------------------------------------------------------------
-        // if (count($files) < 1) {
-        //     resource_print_filenotfound($resource, $cm, $course);
-        //     die;
-        // } else {
-        //     $file = reset($files);
-        //     unset($files);
-        // }
         $code = html_writer::empty_tag("div", null);;
 
 
@@ -116,9 +96,10 @@ class qtype_model3d_renderer extends qtype_renderer {
                                            'model', "$qubaid/$slot/$question->id", '/',
                                             $file->get_filename());
 
-                
 
                 $url->out();
+
+                
 
                 $attributes = [];
                 $attributes['id'] = "contentframe";
@@ -135,83 +116,19 @@ class qtype_model3d_renderer extends qtype_renderer {
                                             
             } 
         }
-    
-        // $resource->mainfile = $file->get_filename();
-        // $displaytype = resource_get_final_display_type($resource);
-        // if ($displaytype == RESOURCELIB_DISPLAY_OPEN || $displaytype == RESOURCELIB_DISPLAY_DOWNLOAD) {
-        //     $redirect = true;
-        // }
 
-        // //---------------------------------------------------------------------------
-
-        // $file = moodle_url::make_pluginfile_url($question->contextid, $componentname,
-        //                                     "model", "$qubaid/$slot/{$itemid}", '/',
-        //                                     $file->get_filename());
-
-  
         $id = "saveGrade". $question->id;
         $inputname = $qa->get_qt_field_name('answer');
         $resourceobject = "resourceobject". $question->id;
-        print_object($id);
-     if ($qa->get_state() == "gradedwrong" || $qa->get_state() == "gradedright") {
-          $result .= <<<EOT
-    <div class="qtext">
-    <iframe id="$resourceobject" width="100%" height="350px" scrolling="no" src="$url" frameBorder="0">
-    </iframe>
-    <table>
-        <tr>
-            <th>Company</th>
-            <th>Contact</th>
-            <th>Country</th>
-        </tr>
-        <tr>
-            <th>Company</th>
-            <th>Contact</th>
-            <th>Country</th>
-        </tr>
-        <tr>
-            <th>Company</th>
-            <th>Contact</th>
-            <th>Country</th>
-        </tr>
-        <tr>
-            <th>Company</th>
-            <th>Contact</th>
-            <th>Country</th>
-        </tr>
-        <tr>
-            <th>Company</th>
-            <th>Contact</th>
-            <th>Country</th>
-        </tr>
-        <tr>
-            <th>Company</th>
-            <th>Contact</th>
-            <th>Country</th>
-        </tr>
-    </table>
-    </div>
-    EOT;
 
- 
-    }
-        else {
-               $this->page->requires->js_call_amd('qtype_model3d/model', 'init', array('id'=>$id, "resourceobject"=>$resourceobject, "inputname" => $inputname));
-                $result .= <<<EOT
-    <div class="qtext">
-    <iframe id="$resourceobject" width="100%" height="350px" scrolling="no" src="$url" frameBorder="0">
-    </iframe>
-  
-    </div>
-    EOT;
-
-
-   
-        }
- 
-
-    
-       
+        $this->page->requires->js_call_amd('qtype_model3d/model', 'init', array('id'=>$id, "resourceobject"=>$resourceobject, "inputname" => $inputname));
+        $result .= <<<EOT
+        <div class="qtext">
+            <iframe id="$resourceobject" width="100%" height="350px" scrolling="no" src="$url" frameBorder="0">
+            </iframe>
+        </div>
+        EOT;
+      
         $trueattributes = array(
             'type' => 'hidden',
             'name' => $inputname,
@@ -221,32 +138,73 @@ class qtype_model3d_renderer extends qtype_renderer {
         $result .= html_writer::empty_tag('input', $trueattributes);
         
         $result .= html_writer::end_tag("div");
-   
-
-
-
-        // $result .= html_writer::empty_tag('div', array('id' => 'modelContainer'));
-        /* Some code to restore the state of the question as you move back and forth
-        from one question to another in a quiz and some code to disable the input fields
-        once a quesiton is submitted/marked */
-
-          
- 
-
- 
-
-    // the size is hardcoded in the boject obove intentionally because it is adjusted by the following function on-the-fly
-    // $this->page->requires->js_init_call('M.util.init_maximised_embed', array('resourceobject'), true);
         return $result;
     }
 
     public function specific_feedback(question_attempt $qa) {
-        // TODO.
-        return 'specific_feedback';
+        $table = $this->build_results_table();
+        return $table;
     }
 
-    public function correct_response(question_attempt $qa) {
-        // TODO.
-        return 'correct_response';
+    // public function correct_response(question_attempt $qa) {
+    //     // TODO.
+    //     return 'correct_response';
+    // }
+
+    protected function build_results_table() {
+
+        $testresults = array(
+            array('test', "expacted", "got", 0.0),
+            array('test', "expacted", "got", 0.2),
+            array('test', "expacted", "got", 1.0)
+        );
+
+        // if(is_array($testresults) && count($testresults) > 1) {
+            $table = new html_table();
+            // $table->attributes['class'] = '';
+            // $headers = $testresults[0];
+            $headers = array("Test", "Expected", "Got", "iscorrect");
+            foreach($headers as $header) {
+                if(strtolower($header) != 'ishidden') {
+                    $table->head[] = strtolower($header) === 'iscorrect' ? '' : $header;
+                }
+            }
+
+            $rowclasses = array();
+            $tablerows = array();
+
+            for($i = 0; $i < count($testresults); $i++) {
+ 
+                $cells = $testresults[$i];
+                // $rowclass = $i % 2 == 0 ? 'r0' : 'r1';
+                $tablerow = array();
+                $j = 0;
+
+                foreach($cells as $cell) {
+                    if(strtolower($headers[$j]) === 'iscorrect') {
+                        $markfrac = (float) $cell;
+                        $tablerow[] = $this->feedback_image($markfrac);
+                    } else {
+                        $tablerow[] = $this->format_cell($cell);
+                    }
+                    
+                    $j++;
+                }
+                $tablerows[] = $tablerow;
+                // $tablerows[] = $cells;
+                // $rosclasses[] = $rowclass;
+            }
+            $table->data = $tablerows;
+            // $table->rowclasses = $rowclasses;
+        // }
+
+        return html_writer::table($table);
+    }
+
+    public static function format_cell($cell) {
+        if (substr($cell, 0, 1) === "\n") {
+            $cell = "\n" . $cell;  // Fix <pre> quirk that ignores leading \n.
+        }
+        return '<pre class="tablecell">' . s($cell) . '</pre>';
     }
 }
