@@ -149,9 +149,9 @@ class qtype_model3d_question extends question_graded_automatically_with_countbac
      * @return array (number, integer) the fraction, and the state.
      */
     public function grade_response(array $response) {
-        // TODO.
+        // "A=3;B=3;C=3;E_1=3;E_2=3;E=3;A=3;F_1=3;F_2=3;F=3"
         $fraction = 0.5;
-        if ($response['answer'] == "A=1;B=2,C=3") {
+        if ($response['answer']) {
             $fraction = 1;
         } else {
             $fraction = 0;

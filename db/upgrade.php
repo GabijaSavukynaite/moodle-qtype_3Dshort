@@ -68,5 +68,16 @@ function xmldb_qtype_model3d_upgrade($oldversion = 0) {
         upgrade_plugin_savepoint(true, 2021042400, 'qtype', 'model3d');
     }
 
+    // if( $oldversion < 2022042200) {
+    //     $table = new xmldb_table('qtype_model3d_model');
+    //     $field = $table->add_field('answer', XMLDB_TYPE_TEXT, 'medium', null, null, null));
+
+    //     if (!$dbman->field_exists($table, $field)) {
+    //         $dbman->add_field($table, $field);
+    //     }
+
+    //     upgrade_plugin_savepoint(true, 2022042200, 'qtype', 'model3d');
+    // }
+
     return true;
 }

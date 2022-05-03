@@ -66,7 +66,9 @@ class qtype_model3d_edit_form extends question_edit_form {
 
         // Answers
         $mform->addElement('header', 'answersheader', get_string('anwersheading', 'qtype_model3d'));
-        $mform->addElement('textarea', 'answer', get_string("answer", "qtype_model3d"),'wrap="virtual" rows="10" cols="70"');
+        // $mform->addElement('textarea', 'answer', get_string("answer", "qtype_model3d"),'wrap="virtual" rows="10" cols="70"');
+        $mform->addElement('text', 'answer', get_string('answer', 'qtype_formulas'),
+            array('size' => 80));
     }
 
     public function set_data($question) {
@@ -84,10 +86,10 @@ class qtype_model3d_edit_form extends question_edit_form {
 
     protected function data_preprocessing($question) {
         $question = parent::data_preprocessing($question);
-        $question = $this->data_preprocessing_hints($question);
+        // $question = $this->data_preprocessing_hints($question);
 
         $options = $this->fileoptions;
-        $options['subdirs'] = false;
+        $options['subdirs'] = true;
 
         file_prepare_draft_area($draftid, $this->context->id,
                 'qtype_model3d', 'model',

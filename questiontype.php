@@ -42,15 +42,6 @@ require_once($CFG->dirroot . '/question/type/model3d/question.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_model3d extends question_type {
-
-
-
-      /* ties additional table fields to the database */
-    // public function extra_question_fields() {
-    //     return array('qtype_model3d', 'somefieldname','anotherfieldname');
-    // }
-
-    
     public function move_files($questionid, $oldcontextid, $newcontextid) {
         $fs = get_file_storage();
 
@@ -81,6 +72,12 @@ class qtype_model3d extends question_type {
         // Fetch old answer ids so that we can reuse them.
         $oldanswers = $DB->get_records('question_answers',
                 array('question' => $question->id), 'id ASC');
+
+
+        // Save question options in question_truefalse table.
+        
+
+        // -------------------------------------------------------
 
         // Save the true answer - update an existing answer if possible.
         $answer = array_shift($oldanswers);
@@ -141,8 +138,7 @@ class qtype_model3d extends question_type {
         }
 
         file_save_draft_area_files($question->model, $question->context->id,
-            'qtype_model3d', 'model', $question->id,
-            array('subdirs' => 0, 'maxbytes' => 0));
+            'qtype_model3d', 'model', $question->id, array('subdirs'=>true),);
     }
 
  /* 

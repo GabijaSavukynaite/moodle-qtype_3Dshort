@@ -38,16 +38,11 @@ require_once($CFG->dirroot.'/mod/resource/lib.php');
 class qtype_model3d_renderer extends qtype_renderer {
     public function formulation_and_controls(question_attempt $qa,
             question_display_options $options) {
-
         global $DB;
-
-        
 
         $question = $qa->get_question();
         $componentname = $question->qtype->plugin_name();
         $model = $DB->get_record('qtype_model3d_model', array('questionid' => $question->id));
-
-        
 
         // $model = file_prepare_standard_editor($model, 'description', $descriptionoptions, $context, 'mod_wavefront', 'description', $model->id);
         // $model = file_prepare_standard_filemanager($model, 'model', $modeloptions, $context, 'mod_wavefront', 'model', $model->id);
@@ -55,16 +50,10 @@ class qtype_model3d_renderer extends qtype_renderer {
         $fs = get_file_storage();
 
         $files = $fs->get_area_files($question->contextid, $componentname, 'model', $question->id);
-
-        $questiontext = $question->format_questiontext($qa);
-
         $result = html_writer::start_tag("div", array('class' => 'qtext', 'id'=> '3dquestion'));
-        $code = html_writer::empty_tag("div", null);;
-
-
+        $code = html_writer::empty_tag("div", null);
 
         foreach ($files as $file) {
-         
             // $f is an instance of stored_file
             $pathname = $file->get_filepath();
             $filename = $file->get_filename();
@@ -75,8 +64,6 @@ class qtype_model3d_renderer extends qtype_renderer {
             if($ext === "json") {
                 $content = $file->get_content();
                 $json_a = json_decode( $content,true);
-               
-                
                 // $urlj = moodle_url::make_pluginfile_url($question->contextid, $componentname,
                 //             'model', "$qubaid/$slot/$question->id", '/',
                 //             $file->get_filename());
@@ -85,58 +72,52 @@ class qtype_model3d_renderer extends qtype_renderer {
             }
 
             if($ext === "html") {
- 
-                $pathname = $file->get_filepath();
-
-                // $url = moodle_url::make_pluginfile_url($question->contextid, $componentname,
-                //                             'model', 0, $pathname,
-                //                             $file->get_filename());
-                
                 $url = moodle_url::make_pluginfile_url($question->contextid, $componentname,
                                            'model', "$qubaid/$slot/$question->id", '/',
                                             $file->get_filename());
-
-
                 $url->out();
-
-                
-
                 $attributes = [];
                 $attributes['id'] = "contentframe";
                 $attributes['src'] = $url;
                 $attributes['width'] = "100%";
                 $attributes['height'] = '400px';
-                $attributes['scrolling'] = "no";
-
-                // $result .= html_writer::empty_tag('iframe', $attributes);
-
-
-      
-    
-                                            
+                $attributes['scrolling'] = "no";                              
             } 
         }
+       
+        $feedbackclass = '';
+        $feedbackimage = '';
 
-        $id = "saveGrade". $question->id;
+        $response = $qa->get_last_qt_data();
+
+        if ($options->correctness && $response["answer"]) {
+            $fraction = 0.0;
+            if($response["answer"] == "A=3;B=3;C=4;E_1=3;E_2=3;E=3;A=3;F_1=3;F_2=2;F=3") {
+                $fraction = 1.0;
+            }
+            $feedbackclass = $this->feedback_class($fraction);
+            $feedbackimage = $this->feedback_image($fraction);
+        }
+
+        $result .= html_writer::tag('div', $question->format_questiontext($qa),
+                array('class' => 'qtext'));
         $inputname = $qa->get_qt_field_name('answer');
         $resourceobject = "resourceobject". $question->id;
-
-        $this->page->requires->js_call_amd('qtype_model3d/model', 'init', array('id'=>$id, "resourceobject"=>$resourceobject, "inputname" => $inputname));
-        $result .= <<<EOT
-        <div class="qtext">
-            <iframe id="$resourceobject" width="100%" height="350px" scrolling="no" src="$url" frameBorder="0">
-            </iframe>
-        </div>
-        EOT;
-      
+            
         $trueattributes = array(
             'type' => 'hidden',
             'name' => $inputname,
-            'value' => 'test',
             'id' => $inputname,
         );
         $result .= html_writer::empty_tag('input', $trueattributes);
-        
+        $result .= <<<EOT
+        <div class="qtext">
+            <iframe id="taskiframe" width="100%" height="350px" scrolling="no" src="$url" frameBorder="0">
+            </iframe>
+        </div>
+        EOT;
+  
+        $result .= html_writer::tag('div', $feedbackimage);
         $result .= html_writer::end_tag("div");
         return $result;
     }
