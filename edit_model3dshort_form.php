@@ -36,34 +36,34 @@ require_once('locallib.php');
 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_model3dshortshort_edit_form extends question_edit_form
+class qtype_model3dshort_edit_form extends question_edit_form
 {
 
     protected function definition_inner($mform)
     {
         $this->add_combined_feedback_fields(true);
 
-        $mform->addElement('header', 'modeloptions', get_string('modelheading', 'qtype_model3dshortshort'));
-        $mform->addElement('filemanager', 'model', get_string('modelfiles', 'qtype_model3dshortshort'), null, $this->getFilemanagerOptions());
-        $mform->addHelpButton('model', 'modelfiles', 'qtype_model3dshortshort');
+        $mform->addElement('header', 'modeloptions', get_string('modelheading', 'qtype_model3dshort'));
+        $mform->addElement('filemanager', 'model', get_string('modelfiles', 'qtype_model3dshort'), null, $this->getFilemanagerOptions());
+        $mform->addHelpButton('model', 'modelfiles', 'qtype_model3dshort');
         $mform->addRule('model', get_string('required'), 'required', null, 'client');
 
-        $mform->addElement('text', 'canvasid', get_string('canvasid', 'qtype_model3dshortshort'), 'maxlength="20"');
+        $mform->addElement('text', 'canvasid', get_string('canvasid', 'qtype_model3dshort'), 'maxlength="20"');
         $mform->setType('canvasid', PARAM_TEXT);
 
-        $mform->addElement('text', 'modelwidth', get_string('modelwidth', 'qtype_model3dshortshort'), 'maxlength="5" size="5"');
+        $mform->addElement('text', 'modelwidth', get_string('modelwidth', 'qtype_model3dshort'), 'maxlength="5" size="5"');
         $mform->setType('modelwidth', PARAM_INT);
 
-        $mform->addElement('text', 'modelheight', get_string('modelheight', 'qtype_model3dshortshort'), 'maxlength="5" size="5"');
+        $mform->addElement('text', 'modelheight', get_string('modelheight', 'qtype_model3dshort'), 'maxlength="5" size="5"');
         $mform->setType('modelheight', PARAM_INT);
 
         // Answers
-        $mform->addElement('header', 'answersheader', get_string('anwersheading', 'qtype_model3dshortshort'));
-        // $mform->addElement('textarea', 'answer', get_string("answer", "qtype_model3dshortshort"),'wrap="virtual" rows="10" cols="70"');
+        $mform->addElement('header', 'answersheader', get_string('anwersheading', 'qtype_model3dshort'));
+        // $mform->addElement('textarea', 'answer', get_string("answer", "qtype_model3dshort"),'wrap="virtual" rows="10" cols="70"');
         $mform->addElement(
             'text',
             'answer',
-            get_string('answer', 'qtype_model3dshortshort'),
+            get_string('answer', 'qtype_model3dshort'),
             array('size' => 80)
         );
     }
@@ -71,7 +71,7 @@ class qtype_model3dshortshort_edit_form extends question_edit_form
     public function set_data($question)
     {
         global $DB;
-        $model = $DB->get_record('qtype_model3dshortshort_model', array('questionid' => $question->id));
+        $model = $DB->get_record('qtype_model3dshort_model', array('questionid' => $question->id));
 
         if ($model->id) {
             $question->canvasid = $model->canvasid;
@@ -96,13 +96,13 @@ class qtype_model3dshortshort_edit_form extends question_edit_form
         // $filemanager_options['maxfiles'] = -1;
         // $filemanager_options['mainfile'] = true;
 
-        qtype_model3dshortshort_check_for_zips($this->context->id,  empty($question->id) ? null : (int) $question->id);
+        qtype_model3dshort_check_for_zips($this->context->id,  empty($question->id) ? null : (int) $question->id);
 
 
         // file_prepare_draft_area(
         //     $draftid,
         //     $this->context->id,
-        //     'qtype_model3dshortshort',
+        //     'qtype_model3dshort',
         //     'model',
         //     empty($question->id) ? null : (int) $question->id,
         //     $this->getFilemanagerOptions()

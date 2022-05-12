@@ -17,14 +17,14 @@
 /**
  * model3dshort question type  capability definition
  *
- * @package    qtype_model3dshortshort
+ * @package    qtype_model3dshort
  * @copyright  20XX Author Name
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
 
 $addons = [
-    "qtype_model3dshortshort" => [
+    "qtype_model3dshort" => [
         "handlers" => [ // Different places where the add-on will display content.
             'model3dshort' => [ // Handler unique name (can be anything).
                 'displaydata' => [
@@ -44,7 +44,7 @@ $addons = [
             ]
         ],
         'lang' => [
-            ['pluginname', 'qtype_model3dshortshort'], // matching value in  lang/en/qtype_model3dshortshort
+            ['pluginname', 'qtype_model3dshort'], // matching value in  lang/en/qtype_model3dshort
         ],
     ]
 ];
