@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * model3d question renderer class.
+ * model3dshort question renderer class.
  *
  * @package    qtype
- * @subpackage model3d
+ * @subpackage model3dshort
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,65 +26,33 @@
 
 
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->dirroot.'/mod/resource/lib.php');
+require_once($CFG->dirroot . '/mod/resource/lib.php');
 
 /**
- * Generates the output for model3d questions.
+ * Generates the output for model3dshort questions.
  *
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_model3d_renderer extends qtype_renderer {
-    public function formulation_and_controls(question_attempt $qa,
-            question_display_options $options) {
-        global $DB;
+class qtype_model3dshortshort_renderer extends qtype_renderer
+{
+    public function formulation_and_controls(
+        question_attempt $qa,
+        question_display_options $options
+    ) {
+        global $DB, $PAGE;
 
         $question = $qa->get_question();
         $componentname = $question->qtype->plugin_name();
-        $model = $DB->get_record('qtype_model3d_model', array('questionid' => $question->id));
+        $model = $DB->get_record('qtype_model3dshortshort_model', array('questionid' => $question->id));
 
-        // $model = file_prepare_standard_editor($model, 'description', $descriptionoptions, $context, 'mod_wavefront', 'description', $model->id);
-        // $model = file_prepare_standard_filemanager($model, 'model', $modeloptions, $context, 'mod_wavefront', 'model', $model->id);
- 
         $fs = get_file_storage();
 
-        $files = $fs->get_area_files($question->contextid, $componentname, 'model', $question->id);
-        $result = html_writer::start_tag("div", array('class' => 'qtext', 'id'=> '3dquestion'));
+        $files = $fs->get_area_files($question->contextid, $componentname, 'model', $question->id, 'sortorder DESC, id ASC', false);
+        $result = html_writer::start_tag("div", array('class' => 'qtext', 'id' => '3dquestion'));
         $code = html_writer::empty_tag("div", null);
 
-        foreach ($files as $file) {
-            // $f is an instance of stored_file
-            $pathname = $file->get_filepath();
-            $filename = $file->get_filename();
-                  $qubaid = $qa->get_usage_id();
-        $slot = $qa->get_slot();
-            $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-            // what type of file is this?
-            if($ext === "json") {
-                $content = $file->get_content();
-                $json_a = json_decode( $content,true);
-                // $urlj = moodle_url::make_pluginfile_url($question->contextid, $componentname,
-                //             'model', "$qubaid/$slot/$question->id", '/',
-                //             $file->get_filename());
-                //             print_object($urlj);
-
-            }
-
-            if($ext === "html") {
-                $url = moodle_url::make_pluginfile_url($question->contextid, $componentname,
-                                           'model', "$qubaid/$slot/$question->id", '/',
-                                            $file->get_filename());
-                $url->out();
-                $attributes = [];
-                $attributes['id'] = "contentframe";
-                $attributes['src'] = $url;
-                $attributes['width'] = "100%";
-                $attributes['height'] = '400px';
-                $attributes['scrolling'] = "no";                              
-            } 
-        }
-       
         $feedbackclass = '';
         $feedbackimage = '';
 
@@ -92,37 +60,85 @@ class qtype_model3d_renderer extends qtype_renderer {
 
         if ($options->correctness && $response["answer"]) {
             $fraction = 0.0;
-            if($response["answer"] == "A=3;B=3;C=4;E_1=3;E_2=3;E=3;A=3;F_1=3;F_2=2;F=3") {
+            if ($response["answer"] == $question->answer) {
                 $fraction = 1.0;
             }
             $feedbackclass = $this->feedback_class($fraction);
             $feedbackimage = $this->feedback_image($fraction);
         }
 
-        $result .= html_writer::tag('div', $question->format_questiontext($qa),
-                array('class' => 'qtext'));
+        $result .= html_writer::tag(
+            'div',
+            $question->format_questiontext($qa),
+            array('class' => 'qtext')
+        );
         $inputname = $qa->get_qt_field_name('answer');
-        $resourceobject = "resourceobject". $question->id;
-            
+        $inputname1 = $qa->get_qt_field_name('answer');
+        $resourceobject = "resourceobject" . $question->id;
+
         $trueattributes = array(
             'type' => 'hidden',
             'name' => $inputname,
-            'id' => $inputname,
+            'id' => $inputname
         );
+
         $result .= html_writer::empty_tag('input', $trueattributes);
-        $result .= <<<EOT
-        <div class="qtext">
-            <iframe id="taskiframe" width="100%" height="350px" scrolling="no" src="$url" frameBorder="0">
-            </iframe>
-        </div>
-        EOT;
-  
+        // $result .= <<<EOT
+        // <div class="qtext">
+        //   <div class="task"></div>
+        // </div>
+        // EOT;
+
+        // $resource->mainfile = $file->get_filename();
+
+        if (count($files) < 1) {
+            // resource_print_filenotfound($resource, $cm, $course);
+            die;
+        } else {
+            $file = reset($files);
+            $qubaid = $qa->get_usage_id();
+            $slot = $qa->get_slot();
+
+            $filepath = $file->get_filepath();
+            unset($files);
+            $url = moodle_url::make_pluginfile_url(
+                $question->contextid,
+                $componentname,
+                'model',
+                "$qubaid/$slot/$question->id",
+                "$filepath",
+                $file->get_filename()
+            );
+
+            $iframename = $qa->get_qt_field_name('iframe');
+            $field_prefix = explode("_", $iframename)[0];
+            $splited_prefix = explode(":", $field_prefix);
+            $url_with_params = $url->out(true, array("qid" => $splited_prefix[0], "a" => $splited_prefix[1]));
+
+            $ext = strtolower(pathinfo($file->get_filename(), PATHINFO_EXTENSION));
+            if ($ext == "html") {
+                $result .= <<<EOT
+                <div class="qtext">
+                    <iframe id="$iframename" name="$iframename" width="100%" height="350px" scrolling="no" src="$url_with_params" frameBorder="0">
+                    </iframe>
+                </div>
+                EOT;
+            }
+
+
+
+            // $PAGE->requires->js($url);
+            // https://subscription.packtpub.com/book/hardware-&-creative/9781849511902/1/ch01lvl1sec03/loading-a-javascript-file
+        }
+
+
         $result .= html_writer::tag('div', $feedbackimage);
         $result .= html_writer::end_tag("div");
         return $result;
     }
 
-    public function specific_feedback(question_attempt $qa) {
+    public function specific_feedback(question_attempt $qa)
+    {
         $table = $this->build_results_table();
         return $table;
     }
@@ -132,7 +148,8 @@ class qtype_model3d_renderer extends qtype_renderer {
     //     return 'correct_response';
     // }
 
-    protected function build_results_table() {
+    protected function build_results_table()
+    {
 
         $testresults = array(
             array('test', "expacted", "got", 0.0),
@@ -141,48 +158,49 @@ class qtype_model3d_renderer extends qtype_renderer {
         );
 
         // if(is_array($testresults) && count($testresults) > 1) {
-            $table = new html_table();
-            // $table->attributes['class'] = '';
-            // $headers = $testresults[0];
-            $headers = array("Test", "Expected", "Got", "iscorrect");
-            foreach($headers as $header) {
-                if(strtolower($header) != 'ishidden') {
-                    $table->head[] = strtolower($header) === 'iscorrect' ? '' : $header;
-                }
+        $table = new html_table();
+        // $table->attributes['class'] = '';
+        // $headers = $testresults[0];
+        $headers = array("Test", "Expected", "Got", "iscorrect");
+        foreach ($headers as $header) {
+            if (strtolower($header) != 'ishidden') {
+                $table->head[] = strtolower($header) === 'iscorrect' ? '' : $header;
             }
+        }
 
-            $rowclasses = array();
-            $tablerows = array();
+        $rowclasses = array();
+        $tablerows = array();
 
-            for($i = 0; $i < count($testresults); $i++) {
- 
-                $cells = $testresults[$i];
-                // $rowclass = $i % 2 == 0 ? 'r0' : 'r1';
-                $tablerow = array();
-                $j = 0;
+        for ($i = 0; $i < count($testresults); $i++) {
 
-                foreach($cells as $cell) {
-                    if(strtolower($headers[$j]) === 'iscorrect') {
-                        $markfrac = (float) $cell;
-                        $tablerow[] = $this->feedback_image($markfrac);
-                    } else {
-                        $tablerow[] = $this->format_cell($cell);
-                    }
-                    
-                    $j++;
+            $cells = $testresults[$i];
+            // $rowclass = $i % 2 == 0 ? 'r0' : 'r1';
+            $tablerow = array();
+            $j = 0;
+
+            foreach ($cells as $cell) {
+                if (strtolower($headers[$j]) === 'iscorrect') {
+                    $markfrac = (float) $cell;
+                    $tablerow[] = $this->feedback_image($markfrac);
+                } else {
+                    $tablerow[] = $this->format_cell($cell);
                 }
-                $tablerows[] = $tablerow;
-                // $tablerows[] = $cells;
-                // $rosclasses[] = $rowclass;
+
+                $j++;
             }
-            $table->data = $tablerows;
-            // $table->rowclasses = $rowclasses;
+            $tablerows[] = $tablerow;
+            // $tablerows[] = $cells;
+            // $rosclasses[] = $rowclass;
+        }
+        $table->data = $tablerows;
+        // $table->rowclasses = $rowclasses;
         // }
 
         return html_writer::table($table);
     }
 
-    public static function format_cell($cell) {
+    public static function format_cell($cell)
+    {
         if (substr($cell, 0, 1) === "\n") {
             $cell = "\n" . $cell;  // Fix <pre> quirk that ignores leading \n.
         }

@@ -15,87 +15,70 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Question type class for the model3d question type.
+ * Question type class for the model3dshort question type.
  *
  * @package    qtype
- * @subpackage model3d
+ * @subpackage model3dshort
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
- /*https://docs.moodle.org/dev/Question_types#Question_type_and_question_definition_classes*/
+
+/*https://docs.moodle.org/dev/Question_types#Question_type_and_question_definition_classes*/
 
 
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/questionlib.php');
 require_once($CFG->dirroot . '/question/engine/lib.php');
-require_once($CFG->dirroot . '/question/type/model3d/question.php');
+require_once($CFG->dirroot . '/question/type/model3dshort/question.php');
 
 
 /**
- * The model3d question type.
+ * The model3dshort question type.
  *
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_model3d extends question_type {
-    public function move_files($questionid, $oldcontextid, $newcontextid) {
+class qtype_model3dshortshort extends question_type
+{
+    public function move_files($questionid, $oldcontextid, $newcontextid)
+    {
         $fs = get_file_storage();
 
         parent::move_files($questionid, $oldcontextid, $newcontextid);
-        $fs->move_area_files_to_new_context($oldcontextid,
-                                    $newcontextid, 'qtype_model3d', 'model', $questionid);
+        $fs->move_area_files_to_new_context(
+            $oldcontextid,
+            $newcontextid,
+            'qtype_model3dshortshort',
+            'model',
+            $questionid
+        );
 
         $this->move_files_in_combined_feedback($questionid, $oldcontextid, $newcontextid);
         $this->move_files_in_hints($questionid, $oldcontextid, $newcontextid);
     }
 
-    protected function delete_files($questionid, $contextid) {
+    protected function delete_files($questionid, $contextid)
+    {
         parent::delete_files($questionid, $contextid);
         $this->delete_files_in_hints($questionid, $contextid);
     }
-     /**
+    /**
      * @param stdClass $question
      * @param array $form
      * @return object
      */
-    public function save_question($question, $form) {
+    public function save_question($question, $form)
+    {
         return parent::save_question($question, $form);
     }
 
-    public function save_question_options($question) {
+    public function save_question_options($question)
+    {
         global $DB;
 
-        // Fetch old answer ids so that we can reuse them.
-        $oldanswers = $DB->get_records('question_answers',
-                array('question' => $question->id), 'id ASC');
-
-
-        // Save question options in question_truefalse table.
-        
-
-        // -------------------------------------------------------
-
-        // Save the true answer - update an existing answer if possible.
-        $answer = array_shift($oldanswers);
-        if (!$answer) {
-            $answer = new stdClass();
-            $answer->question = $question->id;
-            $answer->answer = '';
-            $answer->feedback = '';
-            $answer->id = $DB->insert_record('question_answers', $answer);
-        }
-
-        $answer->answer = $question->answer;
-        $answer->fraction = 1;
-        $answer->feedback = "";
-        $DB->update_record('question_answers', $answer);
-        $trueid = $answer->id;
-
-        // Delete any left over old answer records.
         $fs = get_file_storage();
         foreach ($oldanswers as $oldanswer) {
             $fs->delete_area_files($context->id, 'question', 'answerfeedback', $oldanswer->id);
@@ -103,93 +86,106 @@ class qtype_model3d extends question_type {
         }
 
 
-        $options = $DB->get_record('qtype_model3d', array('questionid' => $question->id));
-        
-        if (!$options) {
-            $options = new stdClass();
-            $options->questionid = $question->id;
-            $options->correctfeedback = '';
-            $options->partiallycorrectfeedback = '';
-            $options->incorrectfeedback = '';
-            $options->id = $DB->insert_record('qtype_model3d', $options);
-        }
-        $options = $this->save_combined_feedback_helper($options, $question, $question->context, true);
+        $oldoptions = $DB->get_record('qtype_model3dshortshort', array('questionid' => $question->id));
 
-        $DB->update_record('qtype_model3d', $options);
-        $this->save_hints($question);
+        $options = new stdClass();
 
-        $oldmodel = $DB->get_record('qtype_model3d_model', array('questionid' => $question->id));
+        $options->questionid = $question->id;
+        $options->correctfeedback = '';
+        $options->partiallycorrectfeedback = '';
+        $options->incorrectfeedback = '';
+        $options->answer = $question->answer;
 
-        $model = new stdClass();
-        if (!$oldmodel->id) {
-            $model->id = $oldmodel->id;
-        } 
-
-        $model->questionid = $question->id;
-        $model->canvasid = $question->canvasid;
-        $model->width = $question->modelwidth;
-        $model->height = $question->modelheight;
-
-        if (isset($oldmodel->id)) {
-            $model->id = $oldmodel->id;
-            $DB->update_record('qtype_model3d_model', $model);
+        if (isset($oldoptions->id)) {
+            $options->id = $oldoptions->id;
+            $DB->update_record('qtype_model3dshortshort', $options);
         } else {
-            $DB->insert_record('qtype_model3d_model', $model);
+            $DB->insert_record('qtype_model3dshortshort', $options);
         }
 
-        file_save_draft_area_files($question->model, $question->context->id,
-            'qtype_model3d', 'model', $question->id, array('subdirs'=>true),);
+
+        // $options->id = $DB->insert_record('qtype_model3dshortshort', $options);
+        // $DB->update_record('qtype_model3dshortshort', $options);
+        // $oldmodel = $DB->get_record('qtype_model3dshortshort_model', array('questionid' => $question->id));
+
+        // $model = new stdClass();
+        // if (!$oldmodel->id) {
+        //     $model->id = $oldmodel->id;
+        // } 
+
+        // $model->questionid = $question->id;
+        // $model->canvasid = $question->canvasid;
+        // $model->width = $question->modelwidth;
+        // $model->height = $question->modelheight;
+
+        // if (isset($oldmodel->id)) {
+        //     $model->id = $oldmodel->id;
+        //     $DB->update_record('qtype_model3dshortshort_model', $model);
+        // } else {
+        //     $DB->insert_record('qtype_model3dshortshort_model', $model);
+        // }
+
+        file_save_draft_area_files(
+            $question->model,
+            $question->context->id,
+            'qtype_model3dshortshort',
+            'model',
+            $question->id,
+            array('subdirs' => true),
+        );
     }
 
- /* 
+    /* 
  * populates fields such as combined feedback 
  * also make $DB calls to get data from other tables
  */
-   public function get_question_options($question) {
+    public function get_question_options($question)
+    {
         global $DB;
-        // $question->options = $DB->get_record('qtype_'.$this->name(),
-        //         array('questionid' => $question->id), '*', MUST_EXIST);
 
-        // $question->options = $DB->get_record('qtype_model3d', ['questionid' => $question->id]);
-
-        // if ($question->options === false) {
-            // If this has happened, then we have a problem.
-            // For the user to be able to edit or delete this question, we need options.
-            debugging("Question ID {$question->id} was missing an options record. Using default.", DEBUG_DEVELOPER);
-
-            $question->options = $this->create_default_options($question);
-        // }
-           if (!$question->options->answers = $DB->get_records('question_answers',
-                array('question' =>  $question->id), 'id ASC')) {
-            echo $OUTPUT->notification('Error: Missing question answers for question ' .
-                    $question->id . '!');
+        if (!$question->options = $DB->get_record(
+            'qtype_model3dshortshort',
+            array('questionid' => $question->id)
+        )) {
+            echo $OUTPUT->notification('Error: Missing question options!');
             return false;
         }
+
+        // if (!$question->options->answers = $DB->get_records(
+        //     'question_answers',
+        //     array('question' =>  $question->id),
+        //     'id ASC'
+        // )) {
+        //     echo $OUTPUT->notification('Error: Missing question answers for question ' .
+        //         $question->id . '!');
+        //     return false;
+        // }
         parent::get_question_options($question);
     }
 
-    protected function create_default_options($question) {
-        // Create a default question options record.
-        $options = new stdClass();
-        $options->questionid = $question->id;
+    // protected function create_default_options($question) {
+    //     // Create a default question options record.
+    //     $options = new stdClass();
+    //     $options->questionid = $question->id;
 
-        // Get the default strings and just set the format.
-        $options->correctfeedback = get_string('correctfeedbackdefault', 'question');
-        $options->correctfeedbackformat = FORMAT_HTML;
-        $options->partiallycorrectfeedback = get_string('partiallycorrectfeedbackdefault', 'question');;
-        $options->partiallycorrectfeedbackformat = FORMAT_HTML;
-        $options->incorrectfeedback = get_string('incorrectfeedbackdefault', 'question');
-        $options->incorrectfeedbackformat = FORMAT_HTML;
-        $options->shownumcorrect = 1;
+    //     // Get the default strings and just set the format.
+    //     $options->correctfeedback = get_string('correctfeedbackdefault', 'question');
+    //     $options->correctfeedbackformat = FORMAT_HTML;
+    //     $options->partiallycorrectfeedback = get_string('partiallycorrectfeedbackdefault', 'question');;
+    //     $options->partiallycorrectfeedbackformat = FORMAT_HTML;
+    //     $options->incorrectfeedback = get_string('incorrectfeedbackdefault', 'question');
+    //     $options->incorrectfeedbackformat = FORMAT_HTML;
+    //     $options->shownumcorrect = 1;
 
-        return $options;
-    }
+    //     return $options;
+    // }
 
 
- /**
- * executed at runtime (e.g. in a quiz or preview 
- **/
-    protected function initialise_question_instance(question_definition $question, $questiondata) {
+    /**
+     * executed at runtime (e.g. in a quiz or preview 
+     **/
+    protected function initialise_question_instance(question_definition $question, $questiondata)
+    {
         parent::initialise_question_instance($question, $questiondata);
         $question->correctanswer = true;
         $questiondata->options->correctfeedback = get_string('correctfeedbackdefault', 'question');
@@ -199,12 +195,14 @@ class qtype_model3d extends question_type {
         $questiondata->options->incorrectfeedback = get_string('incorrectfeedbackdefault', 'question');
         $questiondata->options->incorrectfeedbackformat = FORMAT_HTML;
         $questiondata->options->shownumcorrect = 1;
+        $question->answer = $questiondata->options->answer;
         // print_object($questiondata);
-        $this->initialise_combined_feedback($question, $questiondata,true);
+        $this->initialise_combined_feedback($question, $questiondata, true);
     }
-    
-    public function import_from_xml($data, $question, qformat_xml $format, $extra = null) {
-        if (!isset($data['@']['type']) || $data['@']['type'] != 'qtype_model3d') {
+
+    public function import_from_xml($data, $question, qformat_xml $format, $extra = null)
+    {
+        if (!isset($data['@']['type']) || $data['@']['type'] != 'qtype_model3dshortshort') {
             return false;
         }
         $question = parent::import_from_xml($data, $question, $format, null);
@@ -212,10 +210,11 @@ class qtype_model3d extends question_type {
         $format->import_hints($question, $data, true, false, $format->get_format($question->questiontextformat));
         return $question;
     }
-    public function export_to_xml($question, qformat_xml $format, $extra = null) {
+    public function export_to_xml($question, qformat_xml $format, $extra = null)
+    {
         global $CFG;
         $pluginmanager = core_plugin_manager::instance();
-        $gapfillinfo = $pluginmanager->get_plugin_info('qtype_model3d');
+        $gapfillinfo = $pluginmanager->get_plugin_info('qtype_model3dshortshort');
         $output = parent::export_to_xml($question, $format);
         //TODO
         $output .= $format->write_combined_feedback($question->options, $question->id, $question->contextid);
@@ -223,28 +222,30 @@ class qtype_model3d extends question_type {
     }
 
 
-    public function get_random_guess_score($questiondata) {
+    public function get_random_guess_score($questiondata)
+    {
         // TODO.
         return 0;
     }
 
-    public function get_possible_responses($questiondata) {
+    public function get_possible_responses($questiondata)
+    {
         // TODO.
         return array();
     }
 
-    public function make_question($questiondata) {
+    public function make_question($questiondata)
+    {
         $question = $this->make_question_instance($questiondata);
         $this->initialise_question_instance($question, $questiondata);
         return $question;
     }
 
-    public function delete_question($questionid, $contextid) {
+    public function delete_question($questionid, $contextid)
+    {
         global $DB;
-        $DB->delete_records('qtype_'.$this->name(), array('questionid' => $questionid));
-        $DB->delete_records('qtype_'.$this->name().'_model', array('questionid' => $questionid));
+        $DB->delete_records('qtype_' . $this->name(), array('questionid' => $questionid));
+        $DB->delete_records('qtype_' . $this->name() . '_model', array('questionid' => $questionid));
         return parent::delete_question($questionid, $contextid);
     }
-
-  
 }

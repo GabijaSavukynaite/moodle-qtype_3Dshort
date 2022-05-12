@@ -15,21 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'qtype_model3d', language 'en', branch 'MOODLE_20_STABLE'
+ * Strings for component 'qtype_model3dshortshort', language 'en', branch 'MOODLE_20_STABLE'
  *
  * @package    qtype
- * @subpackage model3d
+ * @subpackage model3dshort
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 // General
-$string['pluginname'] = 'model3d';
-$string['pluginname_help'] = 'Create a model3d question type with insert question description here.';
-$string['pluginname_link'] = 'question/type/model3d';
-$string['pluginnameadding'] = 'Adding a model3d question';
-$string['pluginnameediting'] = 'Editing a model3d question';
-$string['pluginnamesummary'] = 'A model3d question type that allows something to be done that can test a student on some understanding.';
+$string['pluginname'] = 'model3dshort';
+$string['pluginname_help'] = 'Create a model3dshort question type with insert question description here.';
+$string['pluginname_link'] = 'question/type/model3dshort';
+$string['pluginnameadding'] = 'Adding a model3dshort question';
+$string['pluginnameediting'] = 'Editing a model3dshort question';
+$string['pluginnamesummary'] = 'A model3dshort question type that allows something to be done that can test a student on some understanding.';
 
 // Edit form
 $string['modelfiles'] = 'Upload model';
@@ -41,3 +41,4 @@ $string['modelwidth'] = 'Model width';
 
 $string['anwersheading'] = 'Answers';
 $string['answer'] = 'Answer string';
+$string['initialpositions'] = 'Initial Positions';

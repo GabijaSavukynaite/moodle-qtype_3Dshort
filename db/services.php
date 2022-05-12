@@ -15,18 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * model3d question type  capability definition
+ * model3dshort question type  capability definition
  *
- * @package    qtype_model3d
+ * @package    qtype_model3dshortshort
  * @copyright  20XX Author Name
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
 
 $functions = [
-    'qtype_model3d_get_grade' => [
-        'classname' => 'qtype_model3d_external',
-        'classpath' => 'question/type/model3d/externallib.php',
+    'qtype_model3dshortshort_get_grade' => [
+        'classname' => 'qtype_model3dshortshort_external',
+        'classpath' => 'question/type/model3dshort/externallib.php',
         'methodname' => 'get_grade',
         'description' => 'Returns error or success of when insert new response',
         'type' => 'read',

@@ -15,41 +15,43 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Mobile output class for qtype_model3d
+ * Mobile output class for qtype_model3dshortshort
  *
- * @package    qtype_model3d
+ * @package    qtype_model3dshortshort
  * @copyright  2018 YOUR NAME
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace qtype_model3d\output;
+namespace qtype_model3dshortshort\output;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Mobile output class for model3d question type
+ * Mobile output class for model3dshort question type
  *
- * @package    qtype_model3d
+ * @package    qtype_model3dshortshort
  * @copyright  20XX YOUR NAME
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mobile {
+class mobile
+{
 
     /**
-     * Returns the model3d question type for the quiz the mobile app.
+     * Returns the model3dshort question type for the quiz the mobile app.
      *
      * @return void
      */
-    public static function mobile_get_model3d() {
+    public static function mobile_get_model3dshort()
+    {
         global $CFG;
         return [
             'templates' => [
                 [
                     'id' => 'main',
-                    'html' => file_get_contents($CFG->dirroot .'/question/type/model3d/mobile/qtype-model3d.html')
-                    ]
+                    'html' => file_get_contents($CFG->dirroot . '/question/type/model3dshort/mobile/qtype-model3dshort.html')
+                ]
             ],
-            'javascript' => file_get_contents($CFG->dirroot . '/question/type/model3d/mobile/mobile.js')
+            'javascript' => file_get_contents($CFG->dirroot . '/question/type/model3dshort/mobile/mobile.js')
         ];
     }
 }

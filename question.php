@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * model3d question definition class.
+ * model3dshort question definition class.
  *
  * @package    qtype
- * @subpackage model3d
+ * @subpackage model3dshort
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,39 +27,43 @@
 defined('MOODLE_INTERNAL') || die();
 
 /** 
-*This holds the definition of a particular question of this type. 
-*If you load three questions from the question bank, then you will get three instances of 
-*that class. This class is not just the question definition, it can also track the current
-*state of a question as a student attempts it through a question_attempt instance. 
-*/
+ *This holds the definition of a particular question of this type. 
+ *If you load three questions from the question bank, then you will get three instances of 
+ *that class. This class is not just the question definition, it can also track the current
+ *state of a question as a student attempts it through a question_attempt instance. 
+ */
 
 
 /**
- * Represents a model3d question.
+ * Represents a model3dshort question.
  *
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_model3d_question extends question_graded_automatically_with_countback {
-    public $correctanswer;
+class qtype_model3dshortshort_question extends question_graded_automatically_with_countback
+{
+    public $answer;
     /* it may make more sense to think of this as get expected data types */
 
-    public function get_expected_data() {
-        return array('answer' => PARAM_RAW );
+    public function get_expected_data()
+    {
+        return array('answer' => PARAM_RAW);
     }
-    
-     public function start_attempt(question_attempt_step $step, $variant) {
+
+    public function start_attempt(question_attempt_step $step, $variant)
+    {
         //TODO
         /* there are 9 occurrances of this method defined in files called question.php a new install of Moodle
         so you are probably going to have to define it */
     }
-    
+
     /**
      * @return summary a string that summarises how the user responded. This 
      * is used in the quiz responses report
      * */
 
-    public function summarise_response(array $response) {
+    public function summarise_response(array $response)
+    {
         if (isset($response['answer'])) {
             return $response['answer'];
         } else {
@@ -67,7 +71,8 @@ class qtype_model3d_question extends question_graded_automatically_with_countbac
         }
     }
 
-    public function is_complete_response(array $response) {
+    public function is_complete_response(array $response)
+    {
         // TODO.
         /* You might want to check that the user has done something
             before returning true, e.g. clicked a radio button or entered some 
@@ -76,11 +81,12 @@ class qtype_model3d_question extends question_graded_automatically_with_countbac
         return true;
     }
 
-    public function get_validation_error(array $response) {
+    public function get_validation_error(array $response)
+    {
         // TODO.
         return '';
     }
-    
+
     /** 
      * if you are moving from viewing one question to another this will
      * discard the processing if the answer has not changed. If you don't
@@ -99,14 +105,18 @@ class qtype_model3d_question extends question_graded_automatically_with_countbac
      * @return bool whether the two sets of responses are the same - that is
      *      whether the new set of responses can safely be discarded.
      */
-     
-    public function is_same_response(array $prevresponse, array $newresponse) {
+
+    public function is_same_response(array $prevresponse, array $newresponse)
+    {
         // TODO.
         return question_utils::arrays_same_at_key_missing_is_blank(
-                $prevresponse, $newresponse, 'answer');
+            $prevresponse,
+            $newresponse,
+            'answer'
+        );
     }
 
-     /**
+    /**
      * @return question_answer an answer that
      * contains the a response that would get full marks.
      * used in preview mode. If this doesn't return a 
@@ -115,7 +125,8 @@ class qtype_model3d_question extends question_graded_automatically_with_countbac
      * into the rightanswer field of the question_attempts table
      * when a quiz containing this question starts.
      */
-    public function get_correct_response() {
+    public function get_correct_response()
+    {
         return array('answer' => $this->correctanswer);
     }
     /**
@@ -124,23 +135,36 @@ class qtype_model3d_question extends question_graded_automatically_with_countbac
      * @param array $response a response
      * @return array a cleaned up response with the wrong bits reset.
      */
-    public function clear_wrong_from_response(array $response) {
+    public function clear_wrong_from_response(array $response)
+    {
         foreach ($response as $key => $value) {
             /*clear the wrong response/s*/
         }
         return $response;
     }
 
-    public function check_file_access($qa, $options, $component, $filearea,
-            $args, $forcedownload) {
+    public function check_file_access(
+        $qa,
+        $options,
+        $component,
+        $filearea,
+        $args,
+        $forcedownload
+    ) {
 
-        if ($component == 'qtype_model3d' && $filearea == 'model') {
+        if ($component == 'qtype_model3dshortshort' && $filearea == 'model') {
             $question = $qa->get_question(false);
             $itemid = reset($args);
             return $itemid == $question->id;
         } else {
-            return parent::check_file_access($qa, $options, $component, $filearea,
-                    $args, $forcedownload);
+            return parent::check_file_access(
+                $qa,
+                $options,
+                $component,
+                $filearea,
+                $args,
+                $forcedownload
+            );
         }
     }
     /**
@@ -148,18 +172,18 @@ class qtype_model3d_question extends question_graded_automatically_with_countbac
      *      {@link question_attempt_step::get_qt_data()}.
      * @return array (number, integer) the fraction, and the state.
      */
-    public function grade_response(array $response) {
-        // "A=3;B=3;C=3;E_1=3;E_2=3;E=3;A=3;F_1=3;F_2=3;F=3"
+    public function grade_response(array $response)
+    {
         $fraction = 0.5;
-        if ($response['answer']) {
+        if ($response['answer'] == $this->answer) {
             $fraction = 1;
         } else {
             $fraction = 0;
         }
         return array($fraction, question_state::graded_state_for_fraction($fraction));
     }
-     
-     /**
+
+    /**
      * Work out a final grade for this attempt, taking into account all the
      * tries the student made. Used in interactive behaviour once all
      * hints have been used.     * 
@@ -173,7 +197,8 @@ class qtype_model3d_question extends question_graded_automatically_with_countbac
      * sequence of response. 
      * 
      */
-    public function compute_final_grade($responses, $totaltries) {
+    public function compute_final_grade($responses, $totaltries)
+    {
         /*This method is typically where penalty is used. 
         When questions are run using the 'Interactive with multiple 
         tries or 'Adaptive mode' behaviour, so that the student will 

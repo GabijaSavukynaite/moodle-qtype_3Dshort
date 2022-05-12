@@ -15,36 +15,36 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * model3d question type  capability definition
+ * model3dshort question type  capability definition
  *
- * @package    qtype_model3d
+ * @package    qtype_model3dshortshort
  * @copyright  20XX Author Name
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
 
 $addons = [
-    "qtype_model3d" => [
+    "qtype_model3dshortshort" => [
         "handlers" => [ // Different places where the add-on will display content.
-            'model3d' => [ // Handler unique name (can be anything).
+            'model3dshort' => [ // Handler unique name (can be anything).
                 'displaydata' => [
-                    'title' => 'model3d question',
-                    'icon' => '/question/type/model3d/pix/icon.gif',
+                    'title' => 'model3dshort question',
+                    'icon' => '/question/type/model3dshort/pix/icon.gif',
                     'class' => '',
                 ],
                 'delegate' => 'CoreQuestionDelegate', // Delegate (where to display the link to the add-on).
-                'method' => 'mobile_get_model3d',
+                'method' => 'mobile_get_model3dshort',
                 'offlinefunctions' => [
-                    'mobile_get_model3d' => [],// function in classes/output/mobile.php
+                    'mobile_get_model3dshort' => [], // function in classes/output/mobile.php
                 ], // Function needs caching for offline.
                 'styles' => [
-                    'url' => '/question/type/model3d/mobile/styles_app.css',
+                    'url' => '/question/type/model3dshort/mobile/styles_app.css',
                     'version' => '1.00'
                 ]
             ]
         ],
         'lang' => [
-                    ['pluginname', 'qtype_model3d'], // matching value in  lang/en/qtype_model3d
+            ['pluginname', 'qtype_model3dshortshort'], // matching value in  lang/en/qtype_model3dshortshort
         ],
     ]
 ];

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="question/type/model3d/db" VERSION="20210420" COMMENT="XMLDB file for Moodle question/type/model3d"
+<XMLDB PATH="question/type/model3dshort/db" VERSION="20220512" COMMENT="XMLDB file for Moodle question/type/model3dshort"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="qtype_model3d" COMMENT="description of table, e.g. options associated overall question">
+    <TABLE NAME="qtype_model3dshortshortshort" COMMENT="description of table, e.g. options associated overall question">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Foreign key references question.id"/>
@@ -14,19 +14,7 @@
         <FIELD NAME="partiallycorrectfeedbackformat" TYPE="int" LENGTH="2" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="incorrectfeedback" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="incorrectfeedbackformat" TYPE="int" LENGTH="2" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-        <KEY NAME="questionid" TYPE="foreign" FIELDS="questionid" REFTABLE="question" REFFIELDS="id"/>
-      </KEYS>
-    </TABLE>
-    <TABLE NAME="qtype_model3d_model" COMMENT="Model">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="canvasid" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false"/>
-        <FIELD NAME="width" TYPE="int" LENGTH="5" NOTNULL="false" SEQUENCE="false"/>
-        <FIELD NAME="height" TYPE="int" LENGTH="5" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="answer" TYPE="char" LENGTH="1333" NOTNULL="true" DEFAULT="A=1;B=1;C=1;E=1;E_1=1;E_2=1;F=1;F_1=1;F_2=1" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

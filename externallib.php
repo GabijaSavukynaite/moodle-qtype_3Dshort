@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * model3d question type  capability definition
+ * model3dshort question type  capability definition
  *
- * @package    qtype_model3d
+ * @package    qtype_model3dshortshort
  * @copyright  20XX Author Name
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,8 +25,9 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/externallib.php');
 require_once($CFG->libdir . '/questionlib.php');
-class qtype_model3d_external extends external_api {
-        /**
+class qtype_model3dshortshort_external extends external_api
+{
+    /**
      * Describes the parameters for get_grade webservice.
      *
      * @return external_function_parameters
@@ -44,10 +45,12 @@ class qtype_model3d_external extends external_api {
     //  * @return external_single_structure
     //  */
 
-    public static function get_grade_parameters() {
-          return new external_function_parameters(
-            array('edugameid' => new external_value(PARAM_INT, 'edugame instance ID'),
-            'score' => new external_value(PARAM_INT, 'Player final score'),
+    public static function get_grade_parameters()
+    {
+        return new external_function_parameters(
+            array(
+                'edugameid' => new external_value(PARAM_INT, 'edugame instance ID'),
+                'score' => new external_value(PARAM_INT, 'Player final score'),
             )
         );
     }
@@ -58,7 +61,8 @@ class qtype_model3d_external extends external_api {
      * @param int $response The response to check
      * @return array The status and message after checked the response.
      */
-    public static function get_grade($edugameid, $score) {
+    public static function get_grade($edugameid, $score)
+    {
         $result = [];
         $result['status'] = $edugameid;
         $result['message'] = $score;
@@ -74,8 +78,8 @@ class qtype_model3d_external extends external_api {
         return "test";
     }
 
-     public static function get_grade_returns() {
+    public static function get_grade_returns()
+    {
         return new external_value(PARAM_TEXT, 'The welcome message + user first name');
     }
-
 }
