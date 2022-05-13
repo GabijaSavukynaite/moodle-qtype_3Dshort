@@ -18,7 +18,7 @@
  * Serve question type files
  *
  * @since      2.0
- * @package    qtype_model3dshortshort
+ * @package    qtype_model3dshort
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Checks file access for model3dshort questions.
- * @package  qtype_model3dshortshort
+ * @package  qtype_model3dshort
  * @category files
  * @param stdClass $course course object
  * @param stdClass $cm course module object
@@ -41,9 +41,9 @@ defined('MOODLE_INTERNAL') || die();
  * @param array $options additional options affecting the file serving
  * @return bool
  */
-function qtype_model3dshortshort_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array())
+function qtype_model3dshort_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array())
 {
     global $CFG;
     require_once($CFG->libdir . '/questionlib.php');
-    question_pluginfile($course, $context, 'qtype_model3dshortshort', $filearea, $args, $forcedownload, $options);
+    question_pluginfile($course, $context, 'qtype_model3dshort', $filearea, $args, $forcedownload, $options);
 }

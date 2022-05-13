@@ -35,7 +35,7 @@ require_once($CFG->dirroot . '/mod/resource/lib.php');
 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_model3dshortshort_renderer extends qtype_renderer
+class qtype_model3dshort_renderer extends qtype_renderer
 {
     public function formulation_and_controls(
         question_attempt $qa,
@@ -45,7 +45,6 @@ class qtype_model3dshortshort_renderer extends qtype_renderer
 
         $question = $qa->get_question();
         $componentname = $question->qtype->plugin_name();
-        $model = $DB->get_record('qtype_model3dshortshort_model', array('questionid' => $question->id));
 
         $fs = get_file_storage();
 
@@ -57,12 +56,12 @@ class qtype_model3dshortshort_renderer extends qtype_renderer
         $feedbackimage = '';
 
         $response = $qa->get_last_qt_data();
+        print_r($question);
+        print_r($options);
+        print_r($response);
 
-        if ($options->correctness && $response["answer"]) {
-            $fraction = 0.0;
-            if ($response["answer"] == $question->answer) {
-                $fraction = 1.0;
-            }
+        if ($options->correctness) {
+            $fraction = $question->calculate_grade($response, $question->answers);
             $feedbackclass = $this->feedback_class($fraction);
             $feedbackimage = $this->feedback_image($fraction);
         }
@@ -72,17 +71,33 @@ class qtype_model3dshortshort_renderer extends qtype_renderer
             $question->format_questiontext($qa),
             array('class' => 'qtext')
         );
-        $inputname = $qa->get_qt_field_name('answer');
-        $inputname1 = $qa->get_qt_field_name('answer');
+
+        // add fields for answers
+        $i=0;
+        foreach ($question->answers as $answer) {
+            $variablename = "${i}_answer";
+            $currentanswer = $qa->get_last_qt_var($variablename);
+            $inputname = $qa->get_qt_field_name($variablename);
+            $inputattributes = array(
+                'type' => 'text',
+                'name' => $inputname,
+                'value' => $currentanswer,
+                'id' => $inputname
+            );
+
+            if ($options->readonly) {
+                $inputattributes['readonly'] = 'readonly';
+            }
+
+            $result .= html_writer::empty_tag('input', $inputattributes);
+
+            $i++;
+        }
+
         $resourceobject = "resourceobject" . $question->id;
 
-        $trueattributes = array(
-            'type' => 'hidden',
-            'name' => $inputname,
-            'id' => $inputname
-        );
 
-        $result .= html_writer::empty_tag('input', $trueattributes);
+        // $result .= html_writer::empty_tag('input', $trueattributes);
         // $result .= <<<EOT
         // <div class="qtext">
         //   <div class="task"></div>
@@ -111,9 +126,7 @@ class qtype_model3dshortshort_renderer extends qtype_renderer
             );
 
             $iframename = $qa->get_qt_field_name('iframe');
-            $field_prefix = explode("_", $iframename)[0];
-            $splited_prefix = explode(":", $field_prefix);
-            $url_with_params = $url->out(true, array("qid" => $splited_prefix[0], "a" => $splited_prefix[1]));
+            $url_with_params = $url->out();
 
             $ext = strtolower(pathinfo($file->get_filename(), PATHINFO_EXTENSION));
             if ($ext == "html") {

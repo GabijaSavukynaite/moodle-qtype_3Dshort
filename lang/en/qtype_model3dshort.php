@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'qtype_model3dshortshort', language 'en', branch 'MOODLE_20_STABLE'
+ * Strings for component 'qtype_model3dshort', language 'en', branch 'MOODLE_20_STABLE'
  *
  * @package    qtype
  * @subpackage model3dshort

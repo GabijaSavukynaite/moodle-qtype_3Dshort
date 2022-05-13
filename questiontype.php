@@ -41,7 +41,7 @@ require_once($CFG->dirroot . '/question/type/model3dshort/question.php');
 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_model3dshortshort extends question_type
+class qtype_model3dshort extends question_type
 {
     public function move_files($questionid, $oldcontextid, $newcontextid)
     {
@@ -51,7 +51,7 @@ class qtype_model3dshortshort extends question_type
         $fs->move_area_files_to_new_context(
             $oldcontextid,
             $newcontextid,
-            'qtype_model3dshortshort',
+            'qtype_model3dshort',
             'model',
             $questionid
         );
@@ -86,7 +86,7 @@ class qtype_model3dshortshort extends question_type
         }
 
 
-        $oldoptions = $DB->get_record('qtype_model3dshortshort', array('questionid' => $question->id));
+        $oldoptions = $DB->get_record('qtype_model3dshort', array('questionid' => $question->id));
 
         $options = new stdClass();
 
@@ -98,15 +98,28 @@ class qtype_model3dshortshort extends question_type
 
         if (isset($oldoptions->id)) {
             $options->id = $oldoptions->id;
-            $DB->update_record('qtype_model3dshortshort', $options);
+            $DB->update_record('qtype_model3dshort', $options);
         } else {
-            $DB->insert_record('qtype_model3dshortshort', $options);
+            $DB->insert_record('qtype_model3dshort', $options);
         }
 
 
-        // $options->id = $DB->insert_record('qtype_model3dshortshort', $options);
-        // $DB->update_record('qtype_model3dshortshort', $options);
-        // $oldmodel = $DB->get_record('qtype_model3dshortshort_model', array('questionid' => $question->id));
+        // foreach (array_keys($formdata->drops) as $dropno) {
+        //     $drop = new stdClass();
+        //     $drop->questionid = $formdata->id;
+        //     $drop->no = $dropno + 1;
+        //     $drop->xleft = $formdata->drops[$dropno]['xleft'];
+        //     $drop->ytop = $formdata->drops[$dropno]['ytop'];
+        //     $drop->choice = $formdata->drops[$dropno]['choice'];
+        //     $drop->label = $formdata->drops[$dropno]['droplabel'];
+
+        //     $DB->insert_record('qtype_ddimageortext_drops', $drop);
+        // }
+
+
+        // $options->id = $DB->insert_record('qtype_model3dshort', $options);
+        // $DB->update_record('qtype_model3dshort', $options);
+        // $oldmodel = $DB->get_record('qtype_model3dshort_model', array('questionid' => $question->id));
 
         // $model = new stdClass();
         // if (!$oldmodel->id) {
@@ -120,15 +133,15 @@ class qtype_model3dshortshort extends question_type
 
         // if (isset($oldmodel->id)) {
         //     $model->id = $oldmodel->id;
-        //     $DB->update_record('qtype_model3dshortshort_model', $model);
+        //     $DB->update_record('qtype_model3dshort_model', $model);
         // } else {
-        //     $DB->insert_record('qtype_model3dshortshort_model', $model);
+        //     $DB->insert_record('qtype_model3dshort_model', $model);
         // }
 
         file_save_draft_area_files(
             $question->model,
             $question->context->id,
-            'qtype_model3dshortshort',
+            'qtype_model3dshort',
             'model',
             $question->id,
             array('subdirs' => true),
@@ -144,7 +157,7 @@ class qtype_model3dshortshort extends question_type
         global $DB;
 
         if (!$question->options = $DB->get_record(
-            'qtype_model3dshortshort',
+            'qtype_model3dshort',
             array('questionid' => $question->id)
         )) {
             echo $OUTPUT->notification('Error: Missing question options!');
@@ -195,14 +208,14 @@ class qtype_model3dshortshort extends question_type
         $questiondata->options->incorrectfeedback = get_string('incorrectfeedbackdefault', 'question');
         $questiondata->options->incorrectfeedbackformat = FORMAT_HTML;
         $questiondata->options->shownumcorrect = 1;
-        $question->answer = $questiondata->options->answer;
+        $question->answers = explode(";", $questiondata->options->answer);
         // print_object($questiondata);
         $this->initialise_combined_feedback($question, $questiondata, true);
     }
 
     public function import_from_xml($data, $question, qformat_xml $format, $extra = null)
     {
-        if (!isset($data['@']['type']) || $data['@']['type'] != 'qtype_model3dshortshort') {
+        if (!isset($data['@']['type']) || $data['@']['type'] != 'qtype_model3dshort') {
             return false;
         }
         $question = parent::import_from_xml($data, $question, $format, null);
@@ -214,7 +227,7 @@ class qtype_model3dshortshort extends question_type
     {
         global $CFG;
         $pluginmanager = core_plugin_manager::instance();
-        $gapfillinfo = $pluginmanager->get_plugin_info('qtype_model3dshortshort');
+        $gapfillinfo = $pluginmanager->get_plugin_info('qtype_model3dshort');
         $output = parent::export_to_xml($question, $format);
         //TODO
         $output .= $format->write_combined_feedback($question->options, $question->id, $question->contextid);

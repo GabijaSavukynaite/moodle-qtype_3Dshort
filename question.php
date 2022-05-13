@@ -40,14 +40,52 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_model3dshortshort_question extends question_graded_automatically_with_countback
+class qtype_model3dshort_question extends question_graded_automatically_with_countback
 {
-    public $answer;
+    public $answer1;
     /* it may make more sense to think of this as get expected data types */
+
+    public function part_get_expected_data()
+    {
+        $expected = array();
+        $i = 0;
+        // foreach ($this->answers as $answer) {
+        //     $expected["${i}_answer"] = PARAM_RAW;
+        //     $i++;
+        // }
+        // foreach ($this->answers as $answer) {
+        $expected["0_answer"] = PARAM_RAW;
+        $expected["1_answer"] = PARAM_RAW;
+        $expected["2_answer"] = PARAM_RAW;
+
+        return $expected;
+    }
+
+    // public function get_expected_data()
+    // {
+    //     return array('answer1' => PARAM_RAW);
+    // }
+
+
+    public function part_summarise_response(array $response)
+    {
+        $summary = array();
+        foreach ($this->part_get_expected_data() as $name => $type) {
+            if (array_key_exists($name, $response)) {
+                $summary[] = $response[$name];
+            } else {
+                $summary[] = '';
+            }
+        }
+        $summary = implode(', ', $summary);
+        return $summary;
+    }
+
+    // --------------------------------------
 
     public function get_expected_data()
     {
-        return array('answer' => PARAM_RAW);
+        return $this->part_get_expected_data();
     }
 
     public function start_attempt(question_attempt_step $step, $variant)
@@ -64,11 +102,9 @@ class qtype_model3dshortshort_question extends question_graded_automatically_wit
 
     public function summarise_response(array $response)
     {
-        if (isset($response['answer'])) {
-            return $response['answer'];
-        } else {
-            return null;
-        }
+        $summary = $this->part_summarise_response($response);
+        $summary = implode(', ', $summary);
+        return $summary;
     }
 
     public function is_complete_response(array $response)
@@ -108,12 +144,24 @@ class qtype_model3dshortshort_question extends question_graded_automatically_wit
 
     public function is_same_response(array $prevresponse, array $newresponse)
     {
-        // TODO.
-        return question_utils::arrays_same_at_key_missing_is_blank(
-            $prevresponse,
-            $newresponse,
-            'answer'
-        );
+
+        foreach ($this->get_expected_data() as $name => $notused) {
+            if (!question_utils::arrays_same_at_key_missing_is_blank(
+                $prevresponse,
+                $newresponse,
+                $name
+            )) {
+                return false;
+            }
+        }
+        return true;
+
+        // // TODO.
+        // return question_utils::arrays_same_at_key_missing_is_blank(
+        //     $prevresponse,
+        //     $newresponse,
+        //     'answer1'
+        // );
     }
 
     /**
@@ -127,7 +175,20 @@ class qtype_model3dshortshort_question extends question_graded_automatically_wit
      */
     public function get_correct_response()
     {
-        return array('answer' => $this->correctanswer);
+        // return array('answer' => $this->correctanswer);
+        // $responses = array();
+
+        // $i = 0;
+        // foreach ($this->answers as $answer) {
+        //     $expected["${i}_answer"] = PARAM_RAW;
+        //     $i++;
+        // }
+
+        // $response = parent::get_correct_response();
+        if ($response) {
+            $response['answer'] = $this->clean_response($response['answer']);
+        }
+        return $response;
     }
     /**
      * Given a response, reset the parts that are wrong. Relevent in
@@ -152,7 +213,7 @@ class qtype_model3dshortshort_question extends question_graded_automatically_wit
         $forcedownload
     ) {
 
-        if ($component == 'qtype_model3dshortshort' && $filearea == 'model') {
+        if ($component == 'qtype_model3dshort' && $filearea == 'model') {
             $question = $qa->get_question(false);
             $itemid = reset($args);
             return $itemid == $question->id;
@@ -167,6 +228,25 @@ class qtype_model3dshortshort_question extends question_graded_automatically_wit
             );
         }
     }
+
+    public function calculate_grade($response, $answers)
+    {
+        $i = 0;
+        $fraction = 1;
+
+        foreach ($answers as $answer) {
+            $fieldname = "${i}_answer";
+
+            if ($response[$fieldname] != $answer) {
+                $fraction = 0;
+                break;
+            }
+            $i++;
+        }
+
+        return $fraction;
+    }
+
     /**
      * @param array $response responses, as returned by
      *      {@link question_attempt_step::get_qt_data()}.
@@ -174,12 +254,8 @@ class qtype_model3dshortshort_question extends question_graded_automatically_wit
      */
     public function grade_response(array $response)
     {
-        $fraction = 0.5;
-        if ($response['answer'] == $this->answer) {
-            $fraction = 1;
-        } else {
-            $fraction = 0;
-        }
+        $fraction = $this->calculate_grade($response, $this->answers);
+
         return array($fraction, question_state::graded_state_for_fraction($fraction));
     }
 

@@ -36,26 +36,26 @@ require_once("$CFG->libdir/filelib.php");
  * @param $model
  * @return void
  */
-function qtype_model3dshortshort_check_for_zips($contextid, $questionid)
+function qtype_model3dshort_check_for_zips($contextid, $questionid)
 {
     $fs = get_file_storage();
 
-    $files = $fs->get_area_files($contextid, 'qtype_model3dshortshort', 'model', $questionid, "itemid, filepath, filename", false);
+    $files = $fs->get_area_files($contextid, 'qtype_model3dshort', 'model', $questionid, "itemid, filepath, filename", false);
 
     foreach ($files as $storedfile) {
         if ($storedfile->get_mimetype() == 'application/zip') {
             // Unpack.
             $packer = get_file_packer('application/zip');
-            $fs->delete_area_files($contextid, 'qtype_model3dshortshort', 'unpacktemp', 0);
-            $storedfile->extract_to_storage($packer, $contextid, 'qtype_model3dshortshort', 'unpacktemp', 0, '/');
-            $tempfiles = $fs->get_area_files($contextid, 'qtype_model3dshortshort', 'unpacktemp', 0,  "itemid, filepath, filename", false);
+            $fs->delete_area_files($contextid, 'qtype_model3dshort', 'unpacktemp', 0);
+            $storedfile->extract_to_storage($packer, $contextid, 'qtype_model3dshort', 'unpacktemp', 0, '/');
+            $tempfiles = $fs->get_area_files($contextid, 'qtype_model3dshort', 'unpacktemp', 0,  "itemid, filepath, filename", false);
             if (count($tempfiles) > 0) {
                 $storedfile->delete(); // delete the ZIP file.
                 foreach ($tempfiles as $storedfile) {
                     $filename = $storedfile->get_filename();
                     $fileinfo = array(
                         'contextid'     => $contextid,
-                        'component'     => 'qtype_model3dshortshort',
+                        'component'     => 'qtype_model3dshort',
                         'filearea'      => 'model',
                         'itemid'        => $questionid,
                         'filepath'      => '/',
@@ -64,7 +64,7 @@ function qtype_model3dshortshort_check_for_zips($contextid, $questionid)
                     $storedfile = $fs->create_file_from_storedfile($fileinfo, $storedfile);
                 }
             }
-            $fs->delete_area_files($contextid, 'qtype_model3dshortshort', 'unpacktemp', 0);
+            $fs->delete_area_files($contextid, 'qtype_model3dshort', 'unpacktemp', 0);
         }
     }
 }

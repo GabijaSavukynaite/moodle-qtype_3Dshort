@@ -15,21 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Mobile output class for qtype_model3dshortshort
+ * Mobile output class for qtype_model3dshort
  *
- * @package    qtype_model3dshortshort
+ * @package    qtype_model3dshort
  * @copyright  2018 YOUR NAME
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace qtype_model3dshortshort\output;
+namespace qtype_model3dshort\output;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
  * Mobile output class for model3dshort question type
  *
- * @package    qtype_model3dshortshort
+ * @package    qtype_model3dshort
  * @copyright  20XX YOUR NAME
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

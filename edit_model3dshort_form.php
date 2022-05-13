@@ -57,6 +57,10 @@ class qtype_model3dshort_edit_form extends question_edit_form
         $mform->addElement('text', 'modelheight', get_string('modelheight', 'qtype_model3dshort'), 'maxlength="5" size="5"');
         $mform->setType('modelheight', PARAM_INT);
 
+
+        // $this->add_per_answer_fields($mform, get_string('choiceno', 'qtype_model3dshort', '{no}'),
+        //     question_bank::fraction_options_full(), max(5, QUESTION_NUMANS_START));
+
         // Answers
         $mform->addElement('header', 'answersheader', get_string('anwersheading', 'qtype_model3dshort'));
         // $mform->addElement('textarea', 'answer', get_string("answer", "qtype_model3dshort"),'wrap="virtual" rows="10" cols="70"');
@@ -66,18 +70,45 @@ class qtype_model3dshort_edit_form extends question_edit_form
             get_string('answer', 'qtype_model3dshort'),
             array('size' => 80)
         );
+
+        // ---------------------------------------------
+        // $repeatarray = array();
+        // $repeatarray[] = $mform->createElement('text', 'option', get_string('optionno', 'choice'));
+        // // $repeatarray[] = $mform->createElement('text', 'limit', get_string('limitno', 'choice'));
+        // // $repeatarray[] = $mform->createElement('hidden', 'optionid', 0);
+
+        // if ($this->_instance){
+        //     $repeatno = $DB->count_records('choice_options', array('choiceid'=>$this->_instance));
+        //     $repeatno += 2;
+        // } else {
+        //     $repeatno = 5;
+        // }
+
+        // $repeateloptions = array();
+        // // $repeateloptions['limit']['default'] = 0;
+        // // $repeateloptions['limit']['disabledif'] = array('limitanswers', 'eq', 0);
+        // // $repeateloptions['limit']['rule'] = 'numeric';
+        // // $repeateloptions['limit']['type'] = PARAM_INT;
+
+        // $repeateloptions['option']['helpbutton'] = array('choiceoptions', 'choice');
+        // $mform->setType('option', PARAM_CLEANHTML);
+
+        // $mform->setType('optionid', PARAM_INT);
+
+        // $this->repeat_elements($repeatarray, $repeatno,
+        //             $repeateloptions, 'option_repeats', 'option_add_fields', 3, null, true);
     }
 
     public function set_data($question)
     {
         global $DB;
-        $model = $DB->get_record('qtype_model3dshort_model', array('questionid' => $question->id));
+        // $model = $DB->get_record('qtype_model3dshort_model', array('questionid' => $question->id));
 
-        if ($model->id) {
-            $question->canvasid = $model->canvasid;
-            $question->modelwidth = $model->width;
-            $question->modelheight = $model->height;
-        }
+        // if ($model->id) {
+        //     $question->canvasid = $model->canvasid;
+        //     $question->modelwidth = $model->width;
+        //     $question->modelheight = $model->height;
+        // }
 
         parent::set_data($question);
     }
@@ -122,6 +153,41 @@ class qtype_model3dshort_edit_form extends question_edit_form
 
         return $filemanager_options;
     }
+
+    // protected function get_per_answer_fields($mform, $label, $gradeoptions,
+    //         &$repeatedoptions, &$answersoption) {
+    //     $repeated = array();
+    //     $repeated[] = $mform->createElement('editor', 'answer',
+    //             $label, array('rows' => 1), $this->editoroptions);
+    //     $repeated[] = $mform->createElement('select', 'fraction',
+    //             get_string('gradenoun'), $gradeoptions);
+    //     $repeated[] = $mform->createElement('editor', 'feedback',
+    //             get_string('feedback', 'question'), array('rows' => 1), $this->editoroptions);
+    //     $repeatedoptions['answer']['type'] = PARAM_RAW;
+    //     $repeatedoptions['fraction']['default'] = 0;
+    //     $answersoption = 'answers';
+    //     return $repeated;
+    // }
+
+    // protected function add_per_answer_fields(&$mform, $label, $gradeoptions,
+    //         $minoptions = QUESTION_NUMANS_START, $addoptions = QUESTION_NUMANS_ADD) {
+    //     $answersoption = '';
+    //     $repeatedoptions = array();
+    //     $repeated = $this->get_per_answer_fields($mform, $label, $gradeoptions,
+    //             $repeatedoptions, $answersoption);
+
+    //     if (isset($this->question->options)) {
+    //         $repeatsatstart = count($this->question->options->$answersoption);
+    //     } else {
+    //         $repeatsatstart = $minoptions;
+    //     }
+
+    //     $this->repeat_elements($repeated, $repeatsatstart, $repeatedoptions,
+    //             'noanswers', 'addanswers', $addoptions,
+    //             $this->get_more_choices_string(), true);
+    // }
+
+    
 
     public function qtype()
     {

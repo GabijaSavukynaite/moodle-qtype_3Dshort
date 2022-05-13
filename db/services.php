@@ -17,15 +17,15 @@
 /**
  * model3dshort question type  capability definition
  *
- * @package    qtype_model3dshortshort
+ * @package    qtype_model3dshort
  * @copyright  20XX Author Name
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
 
 $functions = [
-    'qtype_model3dshortshort_get_grade' => [
-        'classname' => 'qtype_model3dshortshort_external',
+    'qtype_model3dshort_get_grade' => [
+        'classname' => 'qtype_model3dshort_external',
         'classpath' => 'question/type/model3dshort/externallib.php',
         'methodname' => 'get_grade',
         'description' => 'Returns error or success of when insert new response',
