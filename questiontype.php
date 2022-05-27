@@ -95,6 +95,7 @@ class qtype_model3dshort extends question_type
         $options->partiallycorrectfeedback = '';
         $options->incorrectfeedback = '';
         $options->answer = $question->answer;
+        $options->fieldnames = $options->fieldnames;
 
         if (isset($oldoptions->id)) {
             $options->id = $oldoptions->id;
@@ -209,6 +210,7 @@ class qtype_model3dshort extends question_type
         $questiondata->options->incorrectfeedbackformat = FORMAT_HTML;
         $questiondata->options->shownumcorrect = 1;
         $question->answers = explode(";", $questiondata->options->answer);
+        $question->fieldnames = explode(";", $questiondata->options->fieldnames);
         // print_object($questiondata);
         $this->initialise_combined_feedback($question, $questiondata, true);
     }

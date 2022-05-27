@@ -59,6 +59,23 @@ function xmldb_qtype_model3dshort_upgrade($oldversion = 0)
         upgrade_plugin_savepoint(true, 2022051204, 'qtype', 'model3dshort');
     }
 
+    if ($oldversion < 2022052702) {
+
+        // Define field fieldnames to be added to qtype_model3dshort.
+        $table = new xmldb_table('qtype_model3dshort');
+        $field = new xmldb_field('fieldnames', XMLDB_TYPE_CHAR, '1333', null, XMLDB_NOTNULL, null, 'A=1;B=1;C=1;E=1;E_1=1;E_2=1;F=1;F_1=1;F_2=1', 'answer');
+
+        // Conditionally launch add field fieldnames.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Model3dshort savepoint reached.
+        upgrade_plugin_savepoint(true, 2022052702, 'qtype', 'model3dshort');
+    }
+
+
+
 
     return true;
 }

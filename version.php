@@ -27,7 +27,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'qtype_model3dshort';
-$plugin->version   = 2022051204;
+$plugin->version   = 2022052702;
 
 $plugin->requires  = 2016052300;
 

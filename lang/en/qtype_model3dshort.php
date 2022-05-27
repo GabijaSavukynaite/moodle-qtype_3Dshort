@@ -24,7 +24,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 // General
-$string['pluginname'] = 'model3dshort';
+$string['pluginname'] = '3D short answers';
 $string['pluginname_help'] = 'Create a model3dshort question type with insert question description here.';
 $string['pluginname_link'] = 'question/type/model3dshort';
 $string['pluginnameadding'] = 'Adding a model3dshort question';
@@ -42,3 +42,4 @@ $string['modelwidth'] = 'Model width';
 $string['anwersheading'] = 'Answers';
 $string['answer'] = 'Answer string';
 $string['initialpositions'] = 'Initial Positions';
+$string['fieldnames'] = 'Field Names';

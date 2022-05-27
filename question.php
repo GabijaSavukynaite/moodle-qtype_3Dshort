@@ -237,7 +237,7 @@ class qtype_model3dshort_question extends question_graded_automatically_with_cou
         foreach ($answers as $answer) {
             $fieldname = "${i}_answer";
 
-            if ($response[$fieldname] != $answer) {
+            if (strcasecmp($response[$fieldname], $answer) != 0) {
                 $fraction = 0;
                 break;
             }

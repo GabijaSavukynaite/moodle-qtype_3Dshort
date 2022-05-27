@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="question/type/model3dshort/db" VERSION="20220513" COMMENT="XMLDB file for Moodle question/type/model3dshort"
+<XMLDB PATH="question/type/model3dshort/db" VERSION="20220528" COMMENT="XMLDB file for Moodle question/type/model3dshort"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd"
 >
@@ -15,6 +15,7 @@
         <FIELD NAME="incorrectfeedback" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="incorrectfeedbackformat" TYPE="int" LENGTH="2" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="answer" TYPE="char" LENGTH="1333" NOTNULL="true" DEFAULT="A=1;B=1;C=1;E=1;E_1=1;E_2=1;F=1;F_1=1;F_2=1" SEQUENCE="false"/>
+        <FIELD NAME="fieldnames" TYPE="char" LENGTH="1333" NOTNULL="true" DEFAULT="A=1;B=1;C=1;E=1;E_1=1;E_2=1;F=1;F_1=1;F_2=1" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

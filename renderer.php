@@ -56,15 +56,7 @@ class qtype_model3dshort_renderer extends qtype_renderer
         $feedbackimage = '';
 
         $response = $qa->get_last_qt_data();
-        print_r($question);
-        print_r($options);
-        print_r($response);
-
-        if ($options->correctness) {
-            $fraction = $question->calculate_grade($response, $question->answers);
-            $feedbackclass = $this->feedback_class($fraction);
-            $feedbackimage = $this->feedback_image($fraction);
-        }
+  
 
         $result .= html_writer::tag(
             'div',
@@ -72,42 +64,11 @@ class qtype_model3dshort_renderer extends qtype_renderer
             array('class' => 'qtext')
         );
 
-        // add fields for answers
-        $i=0;
-        foreach ($question->answers as $answer) {
-            $variablename = "${i}_answer";
-            $currentanswer = $qa->get_last_qt_var($variablename);
-            $inputname = $qa->get_qt_field_name($variablename);
-            $inputattributes = array(
-                'type' => 'text',
-                'name' => $inputname,
-                'value' => $currentanswer,
-                'id' => $inputname
-            );
 
-            if ($options->readonly) {
-                $inputattributes['readonly'] = 'readonly';
-            }
-
-            $result .= html_writer::empty_tag('input', $inputattributes);
-
-            $i++;
-        }
 
         $resourceobject = "resourceobject" . $question->id;
 
-
-        // $result .= html_writer::empty_tag('input', $trueattributes);
-        // $result .= <<<EOT
-        // <div class="qtext">
-        //   <div class="task"></div>
-        // </div>
-        // EOT;
-
-        // $resource->mainfile = $file->get_filename();
-
         if (count($files) < 1) {
-            // resource_print_filenotfound($resource, $cm, $course);
             die;
         } else {
             $file = reset($files);
@@ -132,28 +93,60 @@ class qtype_model3dshort_renderer extends qtype_renderer
             if ($ext == "html") {
                 $result .= <<<EOT
                 <div class="qtext">
-                    <iframe id="$iframename" name="$iframename" width="100%" height="350px" scrolling="no" src="$url_with_params" frameBorder="0">
+                    <iframe id="$iframename" name="$iframename" loading="lazy" width="100%" height="350px" scrolling="no" src="$url_with_params" frameBorder="0">
                     </iframe>
                 </div>
                 EOT;
-            }
-
-
-
-            // $PAGE->requires->js($url);
-            // https://subscription.packtpub.com/book/hardware-&-creative/9781849511902/1/ch01lvl1sec03/loading-a-javascript-file
+            }          
         }
 
+        $result .= html_writer::start_tag('div', array('class' => 'answercontainer'));
+                     
+        $i=0;
+        foreach ($question->answers as $answer) {
+            $variablename = "${i}_answer";
+            $currentanswer = $qa->get_last_qt_var($variablename);
+            $inputname = $qa->get_qt_field_name($variablename);
+            $inputattributes = array(
+                'type' => 'text',
+                'name' => $inputname,
+                'value' => $currentanswer,
+                'id' => $inputname
+            );
 
-        $result .= html_writer::tag('div', $feedbackimage);
+            if ($options->readonly) {
+                $inputattributes['readonly'] = 'readonly';
+            }
+
+            $result .= html_writer::start_tag('div', array('class' => 'inputWrapper'));
+            $result .= html_writer::tag('label', $question->fieldnames[$i], array('for' => $inputattributes['id']));
+            $result .= html_writer::empty_tag('input', $inputattributes);
+            $result .= html_writer::end_tag('div');
+
+            $i++;
+        }
+        $result .= html_writer::end_tag('div');
+
+
+        if ($options->correctness) {
+            $fraction = $question->calculate_grade($response, $question->answers);
+            $feedbackclass = $this->feedback_class($fraction);
+            $feedbackimage = $this->feedback_image($fraction);
+
+            if($fraction < 1) {
+                $result .= html_writer::nonempty_tag('div', implode(",", $question->answers), array('class' => 'correctanswer'));
+            }
+        }
+        $result .= html_writer::tag('div', $feedbackimage, array('class' => $feedbackclass));
         $result .= html_writer::end_tag("div");
         return $result;
     }
 
     public function specific_feedback(question_attempt $qa)
     {
-        $table = $this->build_results_table();
-        return $table;
+        // $table = $this->build_results_table();
+        // return $table;
+        return "";
     }
 
     // public function correct_response(question_attempt $qa) {

@@ -71,6 +71,13 @@ class qtype_model3dshort_edit_form extends question_edit_form
             array('size' => 80)
         );
 
+        $mform->addElement(
+            'text',
+            'fieldnames',
+            get_string('fieldnames', 'qtype_model3dshort'),
+            array('size' => 80)
+        );
+
         // ---------------------------------------------
         // $repeatarray = array();
         // $repeatarray[] = $mform->createElement('text', 'option', get_string('optionno', 'choice'));

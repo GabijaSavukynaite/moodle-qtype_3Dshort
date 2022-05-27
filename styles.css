@@ -1,0 +1,32 @@
+.que.model3dshort .correctanswer {
+    display: flex;
+    background-color: #eef;
+    padding: 0.4em;
+    background: #fff3bf;
+    width: fit-content;
+    margin: 5px 0px;
+}
+
+.que.model3dshort .answercontainer{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.que.model3dshort .correcticoncontainer {
+    background-color: #4caf50;
+    opacity: 0.3;
+    display: flex;
+    width: 100%;
+}
+
+.que.model3dshort .incorrecticoncontainer {
+    background-color: #f44336;
+    opacity: 0.3;
+    display: flex;
+    width: 100%;
+}
+
+.que.model3dshort .inputWrapper label {
+    display: block;
+}
